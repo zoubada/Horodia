@@ -1,0 +1,7 @@
+Vidéos Horodia (versions finales, nom Horodia)
+Horodia_presentation.mp4 (9:16, 33 s) : présentation dynamique
+Horodia_demo_pointage_9x16 / 16x9 (30 s) : démo du pointage par code PIN
+Horodia_vente_9x16 / 16x9 (38 s) : vidéo de vente (1 mois gratuit puis 70 €/mois)
+Horodia_pilotes_9x16 / 16x9 (32 s) : recrutement des 10 entreprises pilotes
+Horodia_mise_en_situation_9x16 / 16x9 (53 s) : mise en situation fast-food (Smash Avenue)
+Horodia_court_metrage_9x16.mp4 (62 s) : court-métrage animé "Une journée de Karim"
