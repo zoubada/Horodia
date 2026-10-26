@@ -1,0 +1,1455 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Horodia</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: home with two doors (Employé / Manager); employee time clock full screen; manager back-office with floating sidebar. */
+:root{
+  --bg:#F2F5F3; --surface:#FFFFFF; --surface-2:#EBF0ED; --line:#DCE3DF; --line-2:#C5CFCA;
+  --ink:#101915; --ink-2:#45534C; --ink-3:#74827B;
+  --accent:#0A7A5C; --accent-hover:#07684E; --accent-ink:#FFFFFF; --accent-soft:#DAF0E7;
+  --badge:#F4B42C;
+  --ok:#1C7C44; --ok-soft:#DCF1E3; --warn:#9A5800; --warn-soft:#FBEACB; --bad:#B9302A; --bad-soft:#F8DFDC; --info:#2858AE; --info-soft:#E0E8F8;
+  --p1:#E6E1F7; --p1-ink:#4B3A94; --p2:#FBE3D3; --p2-ink:#8A3F10; --p3:#DCEBFA; --p3-ink:#1F4F86; --p4:#DDF2E6; --p4-ink:#1D6A40; --p5:#F6E7F0; --p5-ink:#86305E;
+  --shadow:0 1px 2px rgba(16,25,21,.05),0 6px 20px rgba(16,25,21,.06);
+  --overlay:rgba(16,25,21,.42);
+  --sign:#F6C02E; --sign-edge:#D29A00; --sign-ink:#2A1E00;
+  --f-display:"Familjen Grotesk","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --r-sm:7px; --r:11px; --r-lg:16px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1311; --surface:#141C19; --surface-2:#1B2522; --line:#26322D; --line-2:#34433C;
+    --ink:#E6EEEA; --ink-2:#A6B4AD; --ink-3:#77867F;
+    --accent:#38C496; --accent-hover:#4FD3A6; --accent-ink:#04241A; --accent-soft:#12372B;
+    --badge:#F4B42C;
+    --ok:#5BCB85; --ok-soft:#163423; --warn:#F0B24A; --warn-soft:#3A2A0E; --bad:#F2786F; --bad-soft:#3D1A17; --info:#86AEF2; --info-soft:#18284A;
+    --p1:#2A2445; --p1-ink:#C4B6F7; --p2:#3D271A; --p2-ink:#F5B98F; --p3:#182E47; --p3-ink:#9CC6F2; --p4:#16362A; --p4-ink:#8FDDB2; --p5:#3A1F30; --p5-ink:#F0A9CF;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+    --overlay:rgba(0,0,0,.6);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1311; --surface:#141C19; --surface-2:#1B2522; --line:#26322D; --line-2:#34433C;
+  --ink:#E6EEEA; --ink-2:#A6B4AD; --ink-3:#77867F;
+  --accent:#38C496; --accent-hover:#4FD3A6; --accent-ink:#04241A; --accent-soft:#12372B;
+  --badge:#F4B42C;
+  --ok:#5BCB85; --ok-soft:#163423; --warn:#F0B24A; --warn-soft:#3A2A0E; --bad:#F2786F; --bad-soft:#3D1A17; --info:#86AEF2; --info-soft:#18284A;
+  --p1:#2A2445; --p1-ink:#C4B6F7; --p2:#3D271A; --p2-ink:#F5B98F; --p3:#182E47; --p3-ink:#9CC6F2; --p4:#16362A; --p4-ink:#8FDDB2; --p5:#3A1F30; --p5-ink:#F0A9CF;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+  --overlay:rgba(0,0,0,.6);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14.5px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:1.75rem;font-weight:700;line-height:1.15}
+h2{font-size:1.15rem;font-weight:600}
+h3{font-size:.95rem;font-weight:600}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--ink-3)}
+.eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;height:38px;padding:0 14px;border-radius:var(--r-sm);border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font-weight:600;font-size:.88rem;cursor:pointer;white-space:nowrap;transition:background .15s,border-color .15s;text-decoration:none}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+.btn.primary:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--ink-2)}
+.btn.ghost:hover{background:var(--surface-2);color:var(--ink)}
+.btn.danger{color:var(--bad)}
+.btn.armed{background:var(--bad);border-color:var(--bad);color:#fff}
+.btn.sm{height:30px;padding:0 10px;font-size:.8rem}
+.btn.icon{width:38px;padding:0}
+.btn.icon.sm{width:30px}
+.btn svg{width:16px;height:16px;flex:none}
+
+.chip{display:inline-flex;align-items:center;gap:.35rem;min-height:24px;padding:2px 9px;border-radius:999px;font-size:.76rem;font-weight:600;white-space:nowrap;background:var(--surface-2);color:var(--ink-2)}
+.chip::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.85;flex:none}
+.chip.plain::before{display:none}
+.chip.ok{background:var(--ok-soft);color:var(--ok)}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.bad{background:var(--bad-soft);color:var(--bad)}
+.chip.info{background:var(--info-soft);color:var(--info)}
+.chip.accent{background:var(--accent-soft);color:var(--accent)}
+.p1{background:var(--p1);color:var(--p1-ink)} .p2{background:var(--p2);color:var(--p2-ink)} .p3{background:var(--p3);color:var(--p3-ink)} .p4{background:var(--p4);color:var(--p4-ink)} .p5{background:var(--p5);color:var(--p5-ink)}
+
+label.f{display:grid;gap:5px;font-size:.8rem;font-weight:600;color:var(--ink-2)}
+.inp{height:40px;width:100%;min-width:0;padding:0 11px;border-radius:var(--r-sm);border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font-size:.92rem;font-weight:500}
+.inp:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+textarea.inp{height:150px;padding:10px;font-family:var(--f-mono);font-size:.76rem;resize:vertical}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.hint{font-size:.78rem;color:var(--ink-3)}
+.err{font-size:.82rem;color:var(--bad);font-weight:600}
+.check{display:flex;gap:8px;align-items:center;font-size:.86rem;font-weight:500;cursor:pointer}
+.check input{width:16px;height:16px;accent-color:var(--accent)}
+
+.logo{display:inline-flex;align-items:center;gap:9px;font-family:var(--f-display);font-weight:700;font-size:1.32rem;letter-spacing:-.02em;color:var(--ink)}
+.logo svg{width:30px;height:30px;flex:none}
+.logo i{display:inline-block;width:7px;height:7px;background:var(--badge);border-radius:2px;margin-left:2px;transform:translateY(-1px)}
+.av{flex:none;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:.78rem;letter-spacing:.02em}
+.av.lg{width:64px;height:64px;border-radius:16px;font-size:1.3rem}
+.av svg{width:18px;height:18px}
+
+/* ---------- home ---------- */
+.home{max-width:1000px;margin:0 auto;min-height:calc(100vh - 32px);display:grid;grid-template-rows:auto 1fr auto;gap:24px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.topbar .site{font-weight:600;color:var(--ink-2);font-size:.9rem}
+.home-mid{display:grid;align-content:center;gap:36px;padding-block:12px}
+.clock{text-align:center}
+.clock .time{font-family:var(--f-mono);font-size:clamp(3.4rem,10vw,6.8rem);font-weight:600;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.clock .time span{color:var(--ink-3);font-size:.4em;letter-spacing:0;margin-left:.15em}
+.clock .date{font-family:var(--f-display);font-size:1.35rem;font-weight:600;color:var(--ink-2);margin-top:8px}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.choice{display:grid;gap:12px;text-align:left;padding:28px;border-radius:22px;border:1px solid var(--line);background:var(--surface);cursor:pointer;box-shadow:var(--shadow);transition:transform .15s,border-color .15s;align-content:start}
+.choice:hover{transform:translateY(-2px);border-color:var(--accent)}
+.choice .ci{width:58px;height:58px;border-radius:16px;display:grid;place-items:center}
+.choice .ci svg{width:28px;height:28px}
+.choice.emp .ci{background:var(--accent);color:var(--accent-ink)}
+.choice.mgr .ci{background:var(--ink);color:var(--bg)}
+.choice.plan .ci{background:var(--p3);color:var(--p3-ink)}
+.choices.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.home.pub{max-width:1440px}
+.repos{font-size:.74rem;color:var(--ink-3);padding:5px 2px}
+.dtabs{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.dtabs button{height:58px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:600;font-size:.78rem;color:var(--ink-2);display:grid;place-items:center;align-content:center;gap:1px;line-height:1.1}
+.dtabs button b{font-family:var(--f-display);font-size:1.2rem;color:var(--ink)}
+.dtabs button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.dtabs button[aria-pressed="true"] b{color:var(--accent-ink)}
+.dtabs button.is-today:not([aria-pressed="true"]){border-color:var(--accent);color:var(--accent)}
+.slots{display:grid}
+.slot{display:flex;align-items:center;gap:14px;padding:14px 18px;border-top:1px solid var(--line)}
+.slot:first-child{border-top:0}
+.slot.now{background:color-mix(in srgb,var(--accent-soft) 50%,transparent)}
+.slot .when{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-weight:600;font-size:1.05rem;min-width:136px;white-space:nowrap}
+.slot .when span{color:var(--ink-3);margin:0 2px}
+.slot .grow{flex:1;min-width:0}
+.slot .grow b{font-size:.98rem;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:1000px){ .choices.three{grid-template-columns:1fr} }
+@media (max-width:520px){ .slot{flex-wrap:wrap;gap:8px 12px;padding:12px 14px} .slot .when{min-width:0;width:100%} .slot .grow b{white-space:normal} .slot .chip.plain{display:none} .dtabs{gap:4px} .dtabs button{height:52px} }
+.choice h2{font-size:1.7rem}
+.choice p{color:var(--ink-2);max-width:36ch}
+.choice .go{font-weight:700;color:var(--accent);margin-top:4px}
+.foot{font-size:.8rem;color:var(--ink-3);text-align:center}
+.foot b{font-family:var(--f-mono);color:var(--ink-2)}
+
+/* ---------- kiosk / pin ---------- */
+.k-body{display:grid;grid-template-columns:1fr minmax(0,420px);gap:28px;align-items:center}
+.k-body .clock{text-align:left}
+.k-panel{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:26px;box-shadow:var(--shadow);display:grid;gap:18px;min-height:470px;align-content:start}
+.k-panel h2{font-size:1.3rem}
+.dots{display:flex;gap:14px;justify-content:center;padding:6px 0}
+.dots i{width:18px;height:18px;border-radius:50%;border:2px solid var(--line-2)}
+.dots i.on{background:var(--accent);border-color:var(--accent)}
+.dots.six{gap:10px} .dots.six i{width:15px;height:15px}
+.dots.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-4px)}}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pad button{height:64px;border-radius:14px;border:1px solid var(--line);background:var(--surface-2);font-family:var(--f-mono);font-size:1.6rem;font-weight:600;cursor:pointer;color:var(--ink)}
+.pad button:hover{border-color:var(--line-2)}
+.pad button:active{transform:scale(.97);background:var(--accent-soft)}
+.pad button.fn{font-family:var(--f-body);font-size:.85rem;color:var(--ink-2)}
+.k-who{display:flex;gap:14px;align-items:center}
+.k-who h2{font-size:1.5rem}
+.k-acts{display:grid;gap:10px}
+.k-acts .btn{height:64px;font-size:1.1rem;border-radius:14px}
+.k-done{display:grid;place-items:center;text-align:center;gap:10px;padding-top:30px}
+.k-done .ok{width:84px;height:84px;border-radius:50%;background:var(--ok-soft);color:var(--ok);display:grid;place-items:center;animation:pop .25s ease}
+.k-done .ok svg{width:42px;height:42px}
+.k-done .big{font-family:var(--f-mono);font-size:2.6rem;font-weight:600}
+.mgr-panel .ci{width:48px;height:48px;border-radius:14px;background:var(--ink);color:var(--bg);display:grid;place-items:center;margin:0 auto}
+.mgr-panel .ci svg{width:24px;height:24px}
+
+/* ---------- shell ---------- */
+.shell{display:grid;grid-template-columns:236px minmax(0,1fr);gap:18px;max-width:1440px;margin:0 auto;align-items:start}
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 12px;display:flex;flex-direction:column;gap:16px;min-height:calc(100vh - 32px)}
+.side-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 8px}
+.space{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:var(--r);background:var(--ink);color:var(--bg);font-size:.8rem;font-weight:600}
+.space svg{width:16px;height:16px}
+.space span{white-space:nowrap}
+.space small{margin-left:auto;opacity:.7;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.nav{display:grid;gap:2px}
+.nav button{display:flex;align-items:center;gap:11px;height:38px;padding:0 10px;border:0;border-radius:var(--r-sm);background:transparent;color:var(--ink-2);font-weight:600;font-size:.88rem;cursor:pointer;text-align:left;white-space:nowrap}
+.nav button svg{width:18px;height:18px;flex:none}
+.nav button:hover{background:var(--surface-2);color:var(--ink)}
+.nav button[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
+.nav .count{margin-left:auto;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--bad);color:#fff;font-size:.7rem;display:grid;place-items:center;font-family:var(--f-mono)}
+.me{margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px 8px 0;border-top:1px solid var(--line)}
+.me .who{min-width:0;flex:1}
+.me .who b{display:block;font-size:.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.me .who span{font-size:.74rem;color:var(--ink-3)}
+.main{min-width:0;display:grid;gap:18px;padding-bottom:40px}
+.page-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 20px}
+.page-head .actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);min-width:0}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px 10px;flex-wrap:wrap}
+.card-b{padding:0 18px 18px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 16px;display:grid;gap:2px;text-align:left}
+button.stat{cursor:pointer;font:inherit;color:inherit}
+button.stat:hover{border-color:var(--line-2)}
+.stat .v{font-family:var(--f-display);font-size:1.9rem;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat .l{font-size:.8rem;color:var(--ink-2);font-weight:600}
+.stat.alert{border-color:color-mix(in srgb,var(--bad) 40%,var(--line))}
+.stat.alert .v{color:var(--bad)}
+.cols{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px;align-items:start}
+.cols.even{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.list{display:grid}
+.row{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line);min-width:0}
+.row:first-child{border-top:0}
+.row .grow{flex:1;min-width:0}
+.row .grow b{display:block;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .grow > span{display:block;font-size:.78rem;color:var(--ink-3)}
+.row.click{cursor:pointer;border-radius:var(--r-sm)}
+.row.click:hover{background:var(--surface-2)}
+.empty{padding:18px 0;color:var(--ink-3);font-size:.88rem}
+.live{display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:1.3rem;font-weight:600}
+.live::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px var(--ok-soft)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.76rem;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:10px;border-radius:3px;display:inline-block}
+.note{font-size:.8rem;color:var(--ink-3);max-width:85ch}
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.navgrp{display:inline-flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:3px}
+.navgrp .lbl{padding:0 10px;font-weight:600;font-size:.88rem;white-space:nowrap}
+.navgrp .btn{height:32px;border:0}
+.wkno{font-family:var(--f-mono);font-size:.72rem;color:var(--ink-3);margin-left:4px}
+.seg{display:inline-flex;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:3px;gap:2px}
+.seg button{height:32px;padding:0 12px;border:0;border-radius:8px;background:transparent;font-weight:600;font-size:.84rem;color:var(--ink-2);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent)}
+
+/* tables */
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.t{width:100%;border-collapse:separate;border-spacing:0;font-size:.86rem}
+.t th{text-align:left;font-size:.7rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface)}
+.t td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+.t tr:last-child td{border-bottom:0}
+.t td.n,.t th.n{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.t td.n{font-size:.82rem}
+.t tfoot td{font-weight:700;border-top:1px solid var(--line-2);border-bottom:0;background:var(--surface-2)}
+.t .who{display:flex;align-items:center;gap:10px;min-width:170px}
+.t .who b{display:block;font-size:.88rem;white-space:nowrap}
+.t .who > div > span{display:block;font-size:.74rem;color:var(--ink-3);white-space:nowrap}
+.zero{color:var(--ink-3)}
+.code{font-family:var(--f-mono);font-weight:600;font-size:1.05rem;letter-spacing:.18em;background:var(--surface-2);padding:3px 10px;border-radius:7px;display:inline-block}
+.code.mgr{background:var(--ink);color:var(--bg);font-size:.9rem}
+
+/* planning grid */
+.plan-t{min-width:980px}
+.plan-t th.day b{display:block;font-family:var(--f-display);font-size:.95rem;letter-spacing:0;text-transform:none;color:var(--ink)}
+.plan-t th.today,.plan-t th.today b{color:var(--accent)}
+.plan-t td{vertical-align:top;padding:8px 6px;border-left:1px solid var(--line)}
+.plan-t td:first-child,.plan-t th:first-child{position:sticky;left:0;z-index:1;background:var(--surface);border-left:0;padding-left:12px}
+.plan-t td.today{background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+.cell{display:grid;gap:4px;min-height:44px;align-content:start}
+.shift{display:block;width:100%;border:0;border-radius:6px;padding:5px 7px;text-align:left;font-family:var(--f-mono);font-size:.74rem;font-weight:600;cursor:pointer;line-height:1.25}
+.shift small{display:block;font-family:var(--f-body);font-size:.68rem;font-weight:600;opacity:.8}
+.shift:disabled{cursor:default}
+.shift.abs{background:var(--info-soft);color:var(--info);font-family:var(--f-body)}
+.addc{display:grid;place-items:center;width:100%;height:24px;border:1px dashed var(--line-2);border-radius:6px;background:transparent;color:var(--ink-3);cursor:pointer;opacity:.55;font-size:1rem;line-height:1}
+.addc:hover,.addc:focus-visible{opacity:1;border-color:var(--accent);color:var(--accent)}
+@media (hover:hover){.plan-t .addc{opacity:0}.plan-t td:hover .addc{opacity:.6}.plan-t td:hover .addc:hover,.plan-t .addc:focus-visible{opacity:1}}
+.tot{font-family:var(--f-mono);font-size:.74rem;font-weight:600}
+.tot.over{color:var(--warn)} .tot.under{color:var(--ink-3)} .tot.ok{color:var(--ok)}
+
+/* end-of-day control */
+.banner{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 18px;border-radius:var(--r-lg)}
+.banner .bi{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex:none;background:var(--surface)}
+.banner .bi svg{width:20px;height:20px}
+.banner .grow{flex:1;min-width:220px}
+.banner b{display:block;font-size:1rem}
+.banner span{color:var(--ink-2);font-size:.86rem}
+.banner.ok{background:var(--ok-soft);color:var(--ok)}
+.banner.bad{background:var(--bad-soft);color:var(--bad)}
+.banner.warn{background:var(--warn-soft);color:var(--warn)}
+.banner.info{background:var(--info-soft);color:var(--info)}
+.corr td{padding:13px 14px}
+.corr tbody tr{cursor:pointer}
+.corr tbody tr:hover td,.corr tbody tr:focus-visible td{background:var(--surface-2)}
+.corr tbody tr:focus-visible{outline:none}
+.corr tr.has-err td{background:color-mix(in srgb,var(--warn-soft) 55%,transparent)}
+.corr tr.has-err:hover td{background:var(--warn-soft)}
+.corr .name b{display:block;font-size:.95rem;white-space:nowrap}
+.corr .name span{display:block;font-family:var(--f-mono);font-size:.72rem;color:var(--ink-3);white-space:nowrap}
+.corr .tm{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:.95rem;font-weight:600;white-space:nowrap}
+.corr .tm .line{display:block}
+.corr .tm .line + .line{margin-top:4px}
+.corr .w{color:var(--warn)}
+.corr .q{display:inline-grid;place-items:center;min-width:26px;height:22px;border-radius:6px;background:var(--sign);color:var(--sign-ink);font-weight:700}
+.corr .mod{text-decoration:underline dotted;text-underline-offset:3px}
+.corr .tot{text-align:right;font-family:var(--f-mono);font-size:.84rem;color:var(--ink-2);white-space:nowrap}
+.corr th:last-child{text-align:right}
+.corr .st{width:1%;white-space:nowrap}
+.corr .st{display:table-cell;text-align:right}
+.corr .st > *{vertical-align:middle}
+.corr .msg{display:inline-block;text-align:right;font-size:.82rem;font-weight:600;color:var(--warn);margin-right:10px;line-height:1.35}
+.corr .msg.n{color:var(--ink-3);font-weight:500}
+.sign{width:30px;height:30px;display:inline-block;flex:none}
+.okc{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ok);color:var(--surface)}
+.okc svg{width:17px;height:17px}
+.neutral{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--surface-2);color:var(--ink-3)}
+.neutral svg{width:16px;height:16px}
+.banner .bi .sign{width:24px;height:24px}
+@media (max-width:640px){
+  .corr,.corr tbody{display:block;min-width:0!important}
+  .corr thead{display:none}
+  .corr tbody tr{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 10px;padding:14px;border-bottom:1px solid var(--line)}
+  .corr tbody tr:last-child{border-bottom:0}
+  .corr tbody td{display:block;padding:0;border:0;background:none!important}
+  .corr tr.has-err{background:color-mix(in srgb,var(--warn-soft) 55%,transparent)}
+  .corr .name{grid-column:1/4}
+  .corr tr.has-err .name{grid-column:1/-1}
+  .corr .st{grid-column:4;grid-row:1;width:auto}
+  .corr .st .msg{display:none}
+  .corr tr.has-err .st .msg{display:block;position:static}
+  .corr .tm::before,.corr .tot::before{content:attr(data-l);display:block;font-family:var(--f-body);font-size:.66rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-bottom:2px}
+  .corr .tot{display:none!important}
+  .corr tr.has-err .st{grid-column:1/-1;grid-row:auto;display:flex;align-items:center;justify-content:flex-start;gap:10px;flex-direction:row-reverse;text-align:left}
+  .corr tr.has-err .st .msg{text-align:left;margin:0;flex:1}
+}
+
+/* sync */
+.steps{display:grid;gap:6px;margin:0;padding-left:20px;color:var(--ink-2);font-size:.86rem}
+.drop{display:grid;gap:10px;padding:14px;border:1.5px dashed var(--line-2);border-radius:var(--r);background:var(--surface-2)}
+.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.fmt{display:grid;gap:8px}
+.fmt label{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:start;padding:12px;border:1px solid var(--line);border-radius:var(--r);cursor:pointer}
+.fmt label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.fmt input{margin-top:3px;accent-color:var(--accent)}
+.fmt b{font-size:.9rem}
+.fmt span{grid-column:2;font-size:.78rem;color:var(--ink-3)}
+.codes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.api{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.api > div{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:var(--r);background:var(--surface-2)}
+.api .ai{width:36px;height:36px;border-radius:10px;background:var(--surface);display:grid;place-items:center;flex:none;color:var(--accent)}
+.api .ai svg{width:18px;height:18px}
+.api b{display:block;font-size:.9rem}
+.api span{font-size:.8rem;color:var(--ink-2)}
+
+/* modal / toast */
+.overlay{position:fixed;inset:0;background:var(--overlay);display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));z-index:50;animation:fade .15s ease}
+.modal{width:min(520px,100%);max-height:calc(100vh - 32px);overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:22px;display:grid;gap:16px;animation:pop .18s ease}
+.modal.wide{width:min(900px,100%)}
+.modal form{display:grid;gap:14px}
+.modal-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;padding-top:4px}
+.modal-actions .spacer{flex:1}
+.prow{display:grid;grid-template-columns:1fr 120px auto;gap:8px;align-items:center}
+@keyframes fade{from{opacity:0}}
+@keyframes pop{from{transform:translateY(8px);opacity:.4}}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:var(--r);font-weight:600;font-size:.88rem;box-shadow:var(--shadow);transition:all .2s;z-index:60;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* responsive */
+@media (max-width:1100px){ .cols,.cols.even{grid-template-columns:minmax(0,1fr)} .crow{grid-template-columns:200px minmax(0,1fr) 70px 96px} }
+@media (max-width:900px){
+  .shell{grid-template-columns:minmax(0,1fr);gap:14px}
+  .side{position:static;min-height:0;padding:12px;gap:12px}
+  .space small{display:none}
+  .nav{display:flex;overflow-x:auto;gap:4px;padding-bottom:2px;scrollbar-width:none}
+  .nav::-webkit-scrollbar{display:none}
+  .nav button{flex:none}
+  .me{display:none}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .k-body{grid-template-columns:minmax(0,1fr)}
+  .k-body .clock{text-align:center}
+  .k-panel{min-height:0}
+  .choices{grid-template-columns:1fr}
+  .crow{grid-template-columns:minmax(0,1fr) auto;padding:14px}
+  .crow .tlw{grid-column:1/-1;grid-row:2}
+  .crow .worked{grid-row:1;grid-column:2}
+  .crow .detail{grid-column:1/-1;grid-row:3}
+  .crow .act{grid-column:1/-1;grid-row:4;text-align:left}
+  .crow.head{display:none}
+  .api{grid-template-columns:1fr}
+}
+@media (min-width:901px){ .side-top .mob-only{display:none} }
+@media (max-width:520px){
+  h1{font-size:1.4rem}
+  .grid2,.grid3,.codes{grid-template-columns:1fr}
+  .stat .v{font-size:1.5rem}
+  .choice{padding:22px}
+  .prow{grid-template-columns:1fr 100px auto}
+}
+</style>
+
+<div id="app"></div>
+<div id="modal-root"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+/* ================= helpers ================= */
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2,'0');
+const dkey = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parseD = k => { const [y,m,d] = k.split('-').map(Number); return new Date(y, m-1, d); };
+const addDays = (d,n) => { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate()+n); return x; };
+const mondayOf = d => addDays(d, -((d.getDay()+6)%7));
+const todayKey = () => dkey(new Date());
+const toMin = t => { const [h,m] = String(t).split(':').map(Number); return h*60+m; };
+const atTime = (k, t) => { const d = parseD(k); const m = toMin(t); d.setHours(Math.floor(m/60), m%60, 0, 0); return d.getTime(); };
+const hm = ts => { const d = new Date(ts); return pad(d.getHours())+':'+pad(d.getMinutes()); };
+const dur = (s,e) => { let x = toMin(e)-toMin(s); if (x <= 0) x += 1440; return x; };
+const eff = p => { const d = dur(p[0],p[1]); return d >= 360 ? d-30 : d; };
+const fmtH = min => { min = Math.round(min); if (!min) return '0h'; const neg = min<0; min = Math.abs(min); const h = Math.floor(min/60), m = min%60; return (neg?'−':'')+h+'h'+(m?pad(m):''); };
+const fmtHz = min => Math.round(min) ? fmtH(min) : '—';
+const eur = n => new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(n);
+const cap = s => s.charAt(0).toUpperCase()+s.slice(1);
+const dLong = d => d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+const dShort = d => d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
+const monthName = (y,m) => cap(new Date(y,m,1).toLocaleDateString('fr-FR',{month:'long',year:'numeric'}));
+const DAYS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+const uid = () => Math.random().toString(36).slice(2,10);
+const slug = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const norm = s => slug(s).replace(/-/g,' ');
+function isoWeek(d){ const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); const day = t.getUTCDay()||7; t.setUTCDate(t.getUTCDate()+4-day); const y0 = new Date(Date.UTC(t.getUTCFullYear(),0,1)); return Math.ceil(((t-y0)/86400000+1)/7); }
+function rng(seed){ return function(){ seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed>>>15, 1|seed); t = t + Math.imul(t ^ t>>>7, 61|t) ^ t; return ((t ^ t>>>14)>>>0)/4294967296; }; }
+function hashStr(s){ let h = 2166136261; for (const ch of s){ h ^= ch.charCodeAt(0); h = Math.imul(h,16777619); } return h>>>0; }
+function shuffle(a,R){ a = a.slice(); for (let i=a.length-1;i>0;i--){ const j = Math.floor(R()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
+
+const ICON = {
+  dashboard:'<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
+  controle:'<path d="M10 6h10M10 12h10M10 18h10M3.5 6l1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17"/>',
+  equipe:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.2"/><path d="M5.5 16c.6-1.6 2-2.4 3.5-2.4s2.9.8 3.5 2.4M15 10h3.5M15 13h2.5"/>',
+  planning:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  absences:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M9.5 13.5l5 5M14.5 13.5l-5 5"/>',
+  paie:'<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/>',
+  sync:'<path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.5M20 4v4.5h-4.5M20 12a8 8 0 0 1-13.7 5.6L4 15.5M4 20v-4.5h4.5"/>',
+  reglages:'<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
+  lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+  shield:'<path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
+  home:'<path d="M4 11l8-7 8 7v9H4z"/><path d="M10 20v-5h4v5"/>',
+  left:'<path d="M15 6l-6 6 6 6"/>', right:'<path d="M9 6l6 6-6 6"/>',
+  warn:'<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h0"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  download:'<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>', upload:'<path d="M12 20V9M7 14l5-5 5 5M5 4h14"/>',
+  copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>', eye:'<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'
+};
+const SIGN = `<svg class="sign" viewBox="0 0 24 24" role="img" aria-label="Erreur"><path d="M12 2.6 22.6 21.2H1.4z" fill="var(--sign)" stroke="var(--sign-edge)" stroke-width="1.2" stroke-linejoin="round"/><path d="M12 9.2v5.4" stroke="var(--sign-ink)" stroke-width="2.3" stroke-linecap="round"/><circle cx="12" cy="17.9" r="1.35" fill="var(--sign-ink)"/></svg>`;
+const ico = (n, sw=1.8) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n]}</svg>`;
+const LOGO = `<span class="logo"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="3" width="22" height="27" rx="6" fill="var(--accent)"/><rect x="12" y="7" width="8" height="2.6" rx="1.3" fill="var(--surface)"/><circle cx="16" cy="19" r="5" fill="none" stroke="var(--accent-ink)" stroke-width="2"/><path d="M16 16.6v2.6l1.7 1.1" fill="none" stroke="var(--accent-ink)" stroke-width="1.7" stroke-linecap="round"/></svg><span>horodia<i></i></span></span>`;
+
+/* ================= data ================= */
+const LS_KEY = 'horodia-demo-v2';
+const POSTES = ['Management','Cuisine','Caisse','Drive','Préparation'];
+const PCLASS = {Management:'p1',Cuisine:'p2',Caisse:'p3',Drive:'p4','Préparation':'p5'};
+const ROLE_LABEL = {gerant:'Gérant', manager:'Manager', equipier:'Équipier'};
+const isMgrRole = r => r === 'gerant' || r === 'manager';
+const ABS_LABEL = {conge:'Congés payés', maladie:'Maladie', absence:'Absence non rémunérée'};
+const ABS_CHIP = {conge:'info', maladie:'warn', absence:'bad'};
+const PTYPE = {in:'Arrivée', break_start:'Début de pause', break_end:'Fin de pause', out:'Départ'};
+const PSHORT = {in:'Arrivée', break_start:'Pause', break_end:'Retour', out:'Départ'};
+const PCLS = {in:'in', break_start:'br', break_end:'br', out:'out'};
+const RUBRICS = [['HN','Heures normales','normal'],['HC','Heures complémentaires','comp'],['HS1','Heures sup. 1er palier','sup1'],['HS2','Heures sup. 2e palier','sup2'],['NUIT','Heures de nuit','night'],['DIM','Heures du dimanche','sunday'],['CP','Congés payés','conge'],['MAL','Maladie','maladie'],['ABS','Absence non rémunérée','absence']];
+const POOL = {
+  Management:[['09:00','17:00'],['10:30','18:30'],['15:30','23:30'],['16:30','00:30']],
+  default:[['10:00','15:00'],['11:00','14:30'],['11:30','15:00'],['11:00','15:00'],['18:00','23:00'],['18:30','00:30'],['17:00','23:30'],['15:00','22:00']]
+};
+const EMP_SEED = [
+  ['Sophie','Martin','gerant','Management',39,16.40,'4821','123456'],
+  ['Karim','Benali','manager','Management',35,13.60,'7310','654321'],
+  ['Léa','Dubois','equipier','Caisse',24,12.20,'1234',''],
+  ['Hugo','Lefèvre','equipier','Cuisine',35,12.40,'2580',''],
+  ['Inès','Moreau','equipier','Drive',30,12.20,'3691',''],
+  ['Mathis','Girard','equipier','Cuisine',20,12.20,'1470',''],
+  ['Chloé','Petit','equipier','Caisse',24,12.20,'8520',''],
+  ['Yanis','Haddad','manager','Management',35,13.40,'9632','246810'],
+  ['Emma','Roux','equipier','Drive',28,12.20,'7412',''],
+  ['Lucas','Fontaine','equipier','Cuisine',35,12.50,'9513',''],
+  ['Sarah',"N'Diaye",'equipier','Caisse',20,12.20,'3570',''],
+  ['Tom','Garnier','equipier','Préparation',24,12.20,'1590','']
+];
+function defaultCompany(){ return { name:'Smash Avenue', city:'Annecy', sector:'Restauration rapide', ccn:'Restauration rapide (IDCC 1501)', legalWeek:35, compRate:10, sup1Rate:25, sup1Cap:8, sup2Rate:50, nightStart:'22:00', nightEnd:'07:00', nightRate:10, sundayRate:10, lateTol:10, missDelay:30,
+  codes:{HN:'HN', HC:'HC10', HS1:'HS25', HS2:'HS50', NUIT:'HNUIT', DIM:'HDIM', CP:'CP', MAL:'MAL', ABS:'ABSNR'} }; }
+function defaultEmployees(){ return EMP_SEED.map(([first,last,role,poste,contract,rate,pin,mpin],i)=>({id:'e'+(i+1), mat:i+1, first, last, role, poste, contract, rate, pin, mpin})); }
+function freshState(){ return {v:2, company:defaultCompany(), employees:defaultEmployees(), shifts:[], punches:[], absences:[], validated:{}, syncLog:[]}; }
+
+let state, screen = 'home', mgr = null, view = 'dashboard', dataVer = 0, cache = {ver:-1};
+const ui = { week:null, day:null, month:null, filter:'all', hideCodes:false, fmt:'vars', pubWeek:null, pubDay:null, pubMode:'week' };
+let modalOpen = false, imp = null, lastAct = Date.now();
+
+function save(){ try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch(e){} }
+function load(){ try { const r = localStorage.getItem(LS_KEY); return r ? JSON.parse(r) : null; } catch(e){ return null; } }
+function mutate(){ dataVer++; save(); }
+
+function shiftTimes(sh){ const s = atTime(sh.date, sh.start); return { s, e: s + dur(sh.start, sh.end)*60000 }; }
+const empById = id => state.employees.find(e => e.id === id);
+const fullName = e => e ? `${e.first} ${e.last}` : 'Employé supprimé';
+const initials = e => (e.first[0]||'')+(e.last.replace(/^[^A-Za-zÀ-ÿ]+/,'')[0]||'');
+const avatar = (e, cls='') => `<span class="av ${PCLASS[e.poste]||'p1'} ${cls}">${esc(initials(e).toUpperCase())}</span>`;
+const absenceOn = (id, k) => state.absences.find(a => a.emp === id && a.from <= k && k <= a.to);
+const matStr = e => 'M'+String(e.mat||0).padStart(3,'0');
+
+function genActivity(){
+  const R = rng(hashStr(todayKey()+'horodia'));
+  const now = Date.now(), curMon = mondayOf(new Date()), E = state.employees;
+  const find = (first, idx) => E.find(e => e.first === first) || E[idx];
+  const wk = (n, d) => dkey(addDays(curMon, n*7+d));
+  const hpd = e => Math.round(e.contract/5*100)/100;
+  const abs = [];
+  const emma = find('Emma',8), tom = find('Tom',11), mathis = find('Mathis',5), ines = find('Inès',4);
+  if (emma) abs.push({id:uid(), emp:emma.id, type:'conge', from:wk(-2,0), to:wk(-2,4), hpd:hpd(emma)});
+  if (tom) abs.push({id:uid(), emp:tom.id, type:'maladie', from:wk(-1,1), to:wk(-1,2), hpd:hpd(tom)});
+  if (mathis) abs.push({id:uid(), emp:mathis.id, type:'absence', from:wk(-3,5), to:wk(-3,5), hpd:hpd(mathis)});
+  if (ines) abs.push({id:uid(), emp:ines.id, type:'conge', from:wk(1,2), to:wk(1,4), hpd:hpd(ines)});
+  state.absences = abs; state.shifts = []; state.punches = []; state.validated = {};
+  const absOn = (id,k) => abs.some(a => a.emp === id && a.from <= k && k <= a.to);
+  for (let w = -6; w <= 1; w++){
+    const mon = addDays(curMon, w*7);
+    for (const emp of E){
+      const C = emp.contract*60;
+      const work = emp.role === 'gerant' ? [0,1,2,3,4] : shuffle([0,1,2,3,4,5,6], R).slice(emp.contract >= 30 ? 2 : emp.contract >= 24 ? 3 : 4).sort((a,b)=>a-b);
+      let remaining = C;
+      work.forEach((d, i) => {
+        const k = dkey(addDays(mon, d));
+        if (absOn(emp.id, k)) { remaining -= C/work.length; return; }
+        const need = remaining/(work.length - i);
+        let picks;
+        if (emp.role === 'gerant') picks = [R() < .5 ? ['09:00','17:15'] : ['10:00','18:15']];
+        else if (emp.poste !== 'Management' && need >= 450) picks = [['11:00','15:00'],['18:30','22:30']];
+        else { const pool = POOL[emp.poste] || POOL.default; const sorted = pool.map(p => [p, Math.abs(eff(p)-need)]).sort((a,b)=>a[1]-b[1]); picks = [sorted[R() < .65 ? 0 : 1][0]]; }
+        for (const p of picks){ state.shifts.push({id:uid(), emp:emp.id, date:k, start:p[0], end:p[1], poste:emp.poste}); remaining -= eff(p); }
+      });
+      if (emp.contract >= 35 && emp.role !== 'gerant' && R() < .4){
+        const free = [0,1,2,3,4,5,6].filter(d => !work.includes(d));
+        if (free.length){ const k = dkey(addDays(mon, free[Math.floor(R()*free.length)])); if (!absOn(emp.id,k)) state.shifts.push({id:uid(), emp:emp.id, date:k, start:'18:00', end:'23:00', poste:emp.poste}); }
+      }
+    }
+  }
+  for (const sh of state.shifts){
+    const {s, e} = shiftTimes(sh); if (s > now) continue;
+    const late = R() < .08 ? 12 + Math.floor(R()*18) : Math.floor(R()*9) - 7;
+    const tin = s + late*60000; if (tin > now) continue;
+    const ps = [{type:'in', ts:tin}];
+    const D = dur(sh.start, sh.end);
+    if (D >= 360){ const bs = s + (Math.floor(D/2) - 15 + Math.floor(R()*30))*60000; const be = bs + (20 + Math.floor(R()*11))*60000; if (bs < now && bs > tin){ ps.push({type:'break_start', ts:bs}); if (be < now) ps.push({type:'break_end', ts:be}); } }
+    const tout = e + (Math.floor(R()*14) - 3)*60000; if (tout < now) ps.push({type:'out', ts:tout});
+    for (const p of ps) state.punches.push({id:uid(), emp:sh.emp, ts:p.ts, type:p.type, src:'borne'});
+  }
+  const hugo = find('Hugo',3);
+  if (hugo){
+    const cand = state.shifts.filter(sh => sh.emp === hugo.id && shiftTimes(sh).e < now - 12*3600e3 && shiftTimes(sh).e > now - 4*86400e3).sort((a,b) => shiftTimes(b).s - shiftTimes(a).s)[0];
+    if (cand){ const {e} = shiftTimes(cand); state.punches = state.punches.filter(p => !(p.emp === hugo.id && p.type === 'out' && p.ts >= e - 5*60000 && p.ts <= e + 15*60000)); }
+  }
+  const live = state.shifts.filter(sh => { const t = shiftTimes(sh); return now - t.s > 11*60000 && now - t.s < 90*60000 && t.e > now; })[0];
+  if (live){ const t = shiftTimes(live); state.punches = state.punches.filter(p => !(p.emp === live.emp && p.ts >= t.s - 20*60000 && p.ts <= now)); }
+  state.punches.sort((a,b) => a.ts - b.ts);
+  state.seedDate = todayKey();
+  dataVer++;
+  // days already checked by the manager in the past
+  const g = E.find(e => e.role === 'gerant') || E[0];
+  for (let i = 3; i <= 45; i++){ const k = dkey(addDays(new Date(), -i)); if (!dayBlockers(k).length) state.validated[k] = {by:g ? g.first : 'Manager', ts:atTime(k,'23:40')}; }
+}
+
+/* ================= computation ================= */
+function C(){
+  if (cache.ver === dataVer) return cache;
+  const shiftsBy = new Map(), sessBy = new Map(), s2s = new Map(), sessShift = new Map(), pBy = new Map();
+  for (const sh of state.shifts){ if (!shiftsBy.has(sh.emp)) shiftsBy.set(sh.emp, []); shiftsBy.get(sh.emp).push(sh); }
+  for (const p of state.punches){ if (!pBy.has(p.emp)) pBy.set(p.emp, []); pBy.get(p.emp).push(p); }
+  for (const [emp, list] of pBy){
+    list.sort((a,b) => a.ts - b.ts);
+    const out = []; let cur = null;
+    for (const p of list){
+      if (p.type === 'in'){ if (cur) out.push(cur); cur = {emp, start:p.ts, end:null, breaks:[], punches:[p], date:dkey(new Date(p.ts))}; }
+      else if (!cur) continue;
+      else {
+        cur.punches.push(p);
+        if (p.type === 'break_start') cur.breaks.push({s:p.ts, e:null});
+        else if (p.type === 'break_end'){ const b = cur.breaks[cur.breaks.length-1]; if (b && b.e == null) b.e = p.ts; }
+        else if (p.type === 'out'){ cur.end = p.ts; out.push(cur); cur = null; }
+      }
+    }
+    if (cur) out.push(cur);
+    sessBy.set(emp, out);
+    const shs = shiftsBy.get(emp) || [];
+    for (const ss of out){
+      let best = null, bd = 4*3600e3;
+      for (const sh of shs){ const d = Math.abs(shiftTimes(sh).s - ss.start); if (d < bd){ bd = d; best = sh; } }
+      if (best){ sessShift.set(ss, best); if (!s2s.has(best.id)) s2s.set(best.id, ss); }
+    }
+  }
+  cache = {ver:dataVer, shiftsBy, sessBy, s2s, sessShift};
+  return cache;
+}
+const sessionsOf = id => C().sessBy.get(id) || [];
+const shiftsOf = id => C().shiftsBy.get(id) || [];
+const shiftsOn = (id, k) => shiftsOf(id).filter(s => s.date === k).sort((a,b) => a.start.localeCompare(b.start));
+const sessionForShift = sh => C().s2s.get(sh.id) || null;
+const shiftForSession = ss => C().sessShift.get(ss) || null;
+function workIntervals(s, endOverride){
+  const end = s.end ?? endOverride; let iv = [[s.start, end]];
+  for (const br of s.breaks){ const bs = br.s, be = br.e ?? end; iv = iv.flatMap(([a,b]) => { if (be <= a || bs >= b) return [[a,b]]; const r = []; if (bs > a) r.push([a,bs]); if (be < b) r.push([be,b]); return r; }); }
+  return iv;
+}
+const ivMin = iv => iv.reduce((t,[a,b]) => t + Math.max(0,b-a), 0)/60000;
+const breakMin = (s, endOverride) => s.breaks.reduce((t,b) => t + Math.max(0, (b.e ?? s.end ?? endOverride) - b.s), 0)/60000;
+function isMissingOut(s){ if (s.end != null) return false; const now = Date.now(); if (now - s.start >= 16*3600e3) return true; const sh = shiftForSession(s); return !!(sh && now > shiftTimes(sh).e + state.company.missDelay*60000); }
+const isLive = s => s.end == null && !isMissingOut(s);
+function nightOverlap(a, b){
+  const c = state.company; let tot = 0; let d = addDays(new Date(a), -1); const last = new Date(b); last.setHours(0,0,0,0);
+  const cross = toMin(c.nightEnd) <= toMin(c.nightStart);
+  while (d <= last){ const k = dkey(d); const ws = atTime(k, c.nightStart); const we = cross ? atTime(dkey(addDays(d,1)), c.nightEnd) : atTime(k, c.nightEnd); tot += Math.max(0, Math.min(b,we) - Math.max(a,ws)); d = addDays(d,1); }
+  return tot/60000;
+}
+function sundayOverlap(a, b){
+  let tot = 0; let d = addDays(new Date(a), 0); const last = new Date(b); last.setHours(0,0,0,0);
+  while (d <= last){ if (d.getDay() === 0){ const s = d.getTime(), e = addDays(d,1).getTime(); tot += Math.max(0, Math.min(b,e) - Math.max(a,s)); } d = addDays(d,1); }
+  return tot/60000;
+}
+function weekStats(emp, monKey){
+  const c = state.company, mon = parseD(monKey), a0 = mon.getTime(), a1 = addDays(mon,7).getTime();
+  let worked = 0, night = 0, sunday = 0, anomalies = 0, late = 0;
+  const abs = {conge:0, maladie:0, absence:0};
+  for (const s of sessionsOf(emp.id)){
+    if (s.start < a0 || s.start >= a1) continue;
+    if (s.end == null){ if (isMissingOut(s)) anomalies++; continue; }
+    for (const [a,b] of workIntervals(s)){ worked += (b-a)/60000; night += nightOverlap(a,b); sunday += sundayOverlap(a,b); }
+    const sh = shiftForSession(s); if (sh && s.start - shiftTimes(sh).s > c.lateTol*60000) late++;
+  }
+  for (let i = 0; i < 6; i++){ const a = absenceOn(emp.id, dkey(addDays(mon,i))); if (a) abs[a.type] += a.hpd*60; }
+  const Cm = emp.contract*60, L = c.legalWeek*60;
+  let normal, comp = 0, sup;
+  if (Cm < L){ normal = Math.min(worked, Cm); comp = Math.min(Math.max(worked-Cm,0), L-Cm); sup = Math.max(worked-L,0); }
+  else { normal = Math.min(worked, L); sup = Math.max(worked-L,0); }
+  const sup1 = Math.min(sup, c.sup1Cap*60), sup2 = sup - sup1;
+  const r = emp.rate/60;
+  const brut = r*(normal + abs.conge) + r*(1+c.compRate/100)*comp + r*(1+c.sup1Rate/100)*sup1 + r*(1+c.sup2Rate/100)*sup2 + r*(c.nightRate/100)*night + r*(c.sundayRate/100)*sunday;
+  return {worked, normal, comp, sup1, sup2, night, sunday, conge:abs.conge, maladie:abs.maladie, absence:abs.absence, anomalies, late, brut};
+}
+const KEYS = ['worked','normal','comp','sup1','sup2','night','sunday','conge','maladie','absence','anomalies','late','brut'];
+function sumStats(list){ const o = {}; for (const k of KEYS) o[k] = list.reduce((t,x) => t + x[k], 0); return o; }
+function monthWeeks(y, m){ const last = new Date(y, m+1, 0); let mon = mondayOf(new Date(y, m, 1)); const res = []; for (;;){ const sun = addDays(mon,6); if (sun > last) break; if (sun.getMonth() === m) res.push(dkey(mon)); mon = addDays(mon,7); } return res; }
+function empPay(emp, weeks){ return sumStats(weeks.map(w => weekStats(emp, w))); }
+
+/* end-of-day report: every person, every punch, every problem */
+function dayReport(k){
+  const now = Date.now(), tol = state.company.lateTol*60000, rows = [];
+  for (const emp of state.employees){
+    const shs = shiftsOn(emp.id, k), ss = sessionsOf(emp.id).filter(s => s.date === k), ab = absenceOn(emp.id, k);
+    if (!shs.length && !ss.length && !ab) continue;
+    const probs = [];
+    for (const sh of shs){
+      if (ab) break;
+      const t = shiftTimes(sh); if (t.s > now) continue;
+      const m = sessionForShift(sh);
+      if (!m || m.date !== k && !ss.includes(m)){
+        if (now < t.e){ if (now - t.s > tol) probs.push({kind:'notyet', lvl:'bad', block:true, text:'Pas encore arrivé'}); }
+        else probs.push({kind:'noshow', lvl:'bad', block:true, text:'Aucun pointage'});
+        continue;
+      }
+      const late = m.start - t.s;
+      if (late > tol) probs.push({kind:'late', lvl:'warn', block:false, ref:m, text:`Retard de ${Math.round(late/60000)} min`});
+      if (m.end){ const early = t.e - m.end; if (early > tol) probs.push({kind:'early', lvl:'warn', block:false, ref:m, text:`Parti ${Math.round(early/60000)} min en avance`}); }
+    }
+    for (const s of ss){
+      if (s.end == null){ if (isMissingOut(s)) probs.push({kind:'missing', lvl:'bad', block:true, text:'Départ non pointé'}); else probs.push({kind:'open', lvl:'info', block:true, text:'En service'}); }
+      else if (s.breaks.some(b => b.e == null)) probs.push({kind:'break', lvl:'bad', block:true, text:'Retour de pause non pointé'});
+      if (!shiftForSession(s)) probs.push({kind:'unplanned', lvl:'info', block:false, text:'Pointage hors planning'});
+    }
+    const worked = ss.reduce((t,s) => t + (s.end != null || isLive(s) ? ivMin(workIntervals(s, Date.now())) : 0), 0);
+    const planned = shs.reduce((t,s) => t + dur(s.start,s.end), 0);
+    rows.push({emp, shs, ss, ab, probs, worked, planned});
+  }
+  const rank = r => r.probs.some(p => p.lvl === 'bad') ? 0 : r.probs.some(p => p.lvl === 'warn') ? 1 : 2;
+  return rows.sort((a,b) => rank(a)-rank(b) || (a.shs[0]?.start||'99').localeCompare(b.shs[0]?.start||'99'));
+}
+const dayBlockers = k => dayReport(k).flatMap(r => r.probs.filter(p => p.lvl === 'bad').map(p => ({...p, emp:r.emp})));
+function dayStatus(k){
+  if (k > todayKey()) return {k:'future'};
+  const rows = dayReport(k);
+  if (!rows.length) return {k:'empty'};
+  const bad = rows.reduce((t,r) => t + r.probs.filter(p => p.lvl === 'bad').length, 0);
+  const warn = rows.reduce((t,r) => t + r.probs.filter(p => p.lvl === 'warn').length, 0);
+  const open = rows.some(r => r.probs.some(p => p.kind === 'open')) || (k === todayKey() && rows.some(r => r.shs.some(s => shiftTimes(s).s > Date.now())));
+  if (state.validated[k] && !bad) return {k:'validated', by:state.validated[k], warn};
+  if (bad) return {k:'bad', bad, warn};
+  if (open) return {k:'live', warn};
+  return {k:'ready', warn};
+}
+function pendingCount(){ let n = 0; for (let i = 0; i < 7; i++){ const k = dkey(addDays(new Date(), -i)); const st = dayStatus(k); if (st.k === 'bad') n += st.bad; } return n; }
+function dayChip(st){
+  switch (st.k){
+    case 'validated': return `<span class="chip ok">Validée</span>`;
+    case 'bad': return `<span class="chip bad">${st.bad} oubli${st.bad>1?'s':''} à corriger</span>`;
+    case 'live': return `<span class="chip accent">En cours</span>`;
+    case 'ready': return `<span class="chip warn">À valider</span>`;
+    case 'empty': return `<span class="chip plain">Aucun shift</span>`;
+  }
+  return '';
+}
+
+function empStatus(emp){
+  const now = Date.now(), k = todayKey();
+  const sess = sessionsOf(emp.id); const last = sess[sess.length-1];
+  if (last && isLive(last)){ const lp = last.punches[last.punches.length-1]; return lp.type === 'break_start' ? {k:'pause', since:lp.ts} : {k:'service', since:last.start}; }
+  const ab = absenceOn(emp.id, k); if (ab) return {k:'abs', abs:ab};
+  for (const sh of shiftsOn(emp.id, k)){
+    if (sessionForShift(sh)) continue;
+    const t = shiftTimes(sh);
+    if (now < t.s) return {k:'attendu', at:t.s, sh};
+    if (now < t.e) return {k:'retard', min:Math.round((now-t.s)/60000), sh};
+    return {k:'manque', sh};
+  }
+  const todaySess = sess.filter(s => s.date === k);
+  if (todaySess.length || shiftsOn(emp.id,k).length) return {k:'termine', worked:todaySess.reduce((t,s) => t + (s.end ? ivMin(workIntervals(s)) : 0), 0)};
+  return null;
+}
+function statusChip(st){
+  const tol = state.company.lateTol;
+  switch (st.k){
+    case 'service': return `<span class="chip ok">En service · ${hm(st.since)}</span>`;
+    case 'pause': return `<span class="chip info">En pause · ${Math.max(1,Math.round((Date.now()-st.since)/60000))} min</span>`;
+    case 'attendu': return `<span class="chip">Attendu à ${hm(st.at)}</span>`;
+    case 'retard': return st.min > tol ? `<span class="chip bad">Pas pointé · +${st.min} min</span>` : `<span class="chip warn">Arrive · +${st.min} min</span>`;
+    case 'manque': return `<span class="chip bad">Absent non signalé</span>`;
+    case 'termine': return `<span class="chip plain">Terminé · ${fmtH(st.worked)}</span>`;
+    case 'abs': return `<span class="chip ${ABS_CHIP[st.abs.type]}">${ABS_LABEL[st.abs.type]}</span>`;
+  }
+  return '';
+}
+
+/* ================= shared bits ================= */
+const NAV = [['dashboard','Tableau de bord'],['controle','Correction'],['equipe','Équipe & codes'],['planning','Planning'],['absences','Absences'],['paie','Paie'],['sync','Synchronisation'],['reglages','Réglages']];
+function weekNav(key, act='week'){
+  const mon = parseD(key), sun = addDays(mon,6);
+  const lbl = mon.getMonth() === sun.getMonth() ? `${mon.getDate()} au ${sun.getDate()} ${sun.toLocaleDateString('fr-FR',{month:'long'})}` : `${mon.getDate()} ${mon.toLocaleDateString('fr-FR',{month:'short'})} au ${sun.getDate()} ${sun.toLocaleDateString('fr-FR',{month:'short'})}`;
+  return `<div class="navgrp"><button class="btn ghost icon sm" data-act="${act}" data-d="-7" aria-label="Semaine précédente">${ico('left')}</button><span class="lbl">Du ${lbl}<span class="wkno">S${isoWeek(mon)}</span></span><button class="btn ghost icon sm" data-act="${act}" data-d="7" aria-label="Semaine suivante">${ico('right')}</button></div>`;
+}
+function monthNav(){ const [y,m] = ui.month; return `<div class="navgrp"><button class="btn ghost icon sm" data-act="month" data-d="-1" aria-label="Mois précédent">${ico('left')}</button><span class="lbl">${monthName(y,m)}</span><button class="btn ghost icon sm" data-act="month" data-d="1" aria-label="Mois suivant">${ico('right')}</button></div>`; }
+function pinPanel(o){
+  return `${o.head}
+    <div class="dots ${o.len===6?'six':''} ${o.err?'shake':''}" aria-label="${o.pin.length} chiffres saisis">${[...Array(o.len)].map((_,i) => `<i class="${i<o.pin.length?'on':''}"></i>`).join('')}</div>
+    <p class="err" style="text-align:center;min-height:1.3em">${o.err ? esc(o.err) : ''}</p>
+    <div class="pad">${['1','2','3','4','5','6','7','8','9'].map(n => `<button data-act="${o.act}" data-k="${n}">${n}</button>`).join('')}<button class="fn" data-act="${o.act}" data-k="clr">Effacer</button><button data-act="${o.act}" data-k="0">0</button><button class="fn" data-act="${o.act}" data-k="del" aria-label="Supprimer le dernier chiffre">⌫</button></div>`;
+}
+function clockHTML(){ const n = new Date(); return `<div class="time" id="kTime">${hm(n)}<span>${pad(n.getSeconds())}</span></div><div class="date">${cap(dLong(n))}</div>`; }
+
+/* ================= home / employee / manager pin ================= */
+function homeHTML(){
+  const c = state.company;
+  return `<div class="home">
+    <header class="topbar">${LOGO}<span class="site">${esc(c.name)} · ${esc(c.city)}</span></header>
+    <div class="home-mid">
+      <div class="clock">${clockHTML()}</div>
+      <div class="choices three">
+        <button class="choice emp" data-act="go-kiosk"><span class="ci">${ico('clock',2)}</span><h2>Employé</h2><p>Pointer son arrivée, sa pause ou son départ avec son code personnel à 4 chiffres.</p><span class="go">Je pointe →</span></button>
+        <button class="choice plan" data-act="go-planning"><span class="ci">${ico('cal',2)}</span><h2>Planning</h2><p>Voir qui travaille aujourd'hui et cette semaine. Sans code.</p><span class="go">Voir le planning →</span></button>
+        <button class="choice mgr" data-act="go-mgr"><span class="ci">${ico('shield',2)}</span><h2>Manager</h2><p>Correction des pointages, équipe et codes, planning, paie et synchronisation.</p><span class="go">Accès manager →</span></button>
+      </div>
+    </div>
+    <p class="foot">Démo, données fictives. Codes employés : Léa <b>1234</b> · Hugo <b>2580</b> · code manager : Sophie <b>123456</b></p>
+  </div>`;
+}
+let kiosk, kTimer = null;
+function resetKiosk(){ kiosk = {pin:'', emp:null, done:null, err:''}; clearTimeout(kTimer); }
+let mpin = {pin:'', err:''};
+function kioskHTML(){
+  const demo = state.employees.filter(e => ['Léa','Hugo','Karim'].includes(e.first));
+  return `<div class="home">
+    <header class="topbar">${LOGO}<span class="site">${esc(state.company.name)} · Pointage employé</span><button class="btn ghost sm" data-act="go-home">${ico('home')} Accueil</button></header>
+    <div class="k-body">
+      <div class="clock">${clockHTML()}<div style="margin-top:24px;display:flex;gap:8px;flex-wrap:wrap" class="k-co"><span class="chip ok">Borne connectée</span><span class="chip plain">${state.employees.length} employés</span></div></div>
+      <div class="k-panel" id="kPanel">${kioskPanel()}</div>
+    </div>
+    <p class="foot">Démo, codes : ${demo.map(e => `${esc(e.first)} <b>${esc(e.pin)}</b>`).join(' · ')}</p>
+  </div>`;
+}
+function kioskPanel(){
+  if (kiosk.done){ const d = kiosk.done;
+    return `<div class="k-done"><div class="ok">${ico('check',2.4)}</div><h2>${esc(d.title)}</h2><div class="big">${hm(d.ts)}</div><p class="muted">${esc(d.msg)}</p>${d.warn?`<span class="chip warn">${esc(d.warn)}</span>`:''}</div>`; }
+  if (kiosk.emp){
+    const e = empById(kiosk.emp), st = empStatus(e);
+    const next = shiftsOf(e.id).filter(s => shiftTimes(s).e > Date.now()).sort((a,b) => shiftTimes(a).s - shiftTimes(b).s)[0];
+    const acts = st && st.k === 'service' ? [['break_start','Partir en pause',''],['out','Départ','primary']] : st && st.k === 'pause' ? [['break_end','Retour de pause','primary']] : [['in','Arrivée','primary']];
+    return `<div class="k-who">${avatar(e,'lg')}<div><p class="eyebrow">Bonjour</p><h2>${esc(fullName(e))}</h2></div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">${st && ['service','pause'].includes(st.k) ? statusChip(st) : '<span class="chip plain">Pas en service</span>'}${next ? `<span class="chip plain">Shift ${next.date===todayKey()?"aujourd'hui":dShort(parseD(next.date))} · ${next.start}–${next.end}</span>` : ''}</div>
+      <div class="k-acts">${acts.map(([t,l,c]) => `<button class="btn ${c}" data-act="k-act" data-type="${t}">${l}</button>`).join('')}</div>
+      <button class="btn ghost" data-act="k-cancel">Ce n'est pas moi</button>`;
+  }
+  return pinPanel({pin:kiosk.pin, len:4, err:kiosk.err, act:'k-key', head:`<div style="text-align:center;display:grid;gap:4px"><h2>Tape ton code</h2><p class="muted">4 chiffres, puis choisis ton action</p></div>`});
+}
+function mgrPinHTML(){
+  const ms = state.employees.filter(e => isMgrRole(e.role) && e.mpin);
+  return `<div class="home">
+    <header class="topbar">${LOGO}<span class="site">${esc(state.company.name)} · Espace manager</span><button class="btn ghost sm" data-act="go-home">${ico('home')} Accueil</button></header>
+    <div class="k-body">
+      <div class="clock">${clockHTML()}</div>
+      <div class="k-panel mgr-panel" id="mPanel">${mgrPanel()}</div>
+    </div>
+    <p class="foot">Démo, codes manager : ${ms.slice(0,2).map(e => `${esc(e.first)} <b>${esc(e.mpin)}</b>`).join(' · ')}</p>
+  </div>`;
+}
+function mgrPanel(){ return pinPanel({pin:mpin.pin, len:6, err:mpin.err, act:'m-key', head:`<div style="text-align:center;display:grid;gap:8px"><span class="ci">${ico('lock',2)}</span><h2>Code manager</h2><p class="muted">6 chiffres</p></div>`}); }
+function paint(id, html){ const p = $('#'+id); if (p) p.innerHTML = html; }
+function idle(ms){ clearTimeout(kTimer); kTimer = setTimeout(() => { resetKiosk(); paint('kPanel', kioskPanel()); }, ms); }
+function kioskPress(k){
+  if (kiosk.done || kiosk.emp) return;
+  kiosk.err = '';
+  if (k === 'del') kiosk.pin = kiosk.pin.slice(0,-1); else if (k === 'clr') kiosk.pin = ''; else if (kiosk.pin.length < 4) kiosk.pin += k;
+  if (kiosk.pin.length === 4){ const e = state.employees.find(x => x.pin === kiosk.pin); kiosk.pin = ''; if (e){ kiosk.emp = e.id; idle(20000); } else kiosk.err = 'Code inconnu. Réessaie.'; }
+  paint('kPanel', kioskPanel());
+}
+function mgrPress(k){
+  mpin.err = '';
+  if (k === 'del') mpin.pin = mpin.pin.slice(0,-1); else if (k === 'clr') mpin.pin = ''; else if (mpin.pin.length < 6) mpin.pin += k;
+  if (mpin.pin.length === 6){
+    const e = state.employees.find(x => isMgrRole(x.role) && x.mpin === mpin.pin); mpin.pin = '';
+    if (e){ mgr = e.id; screen = 'manager'; view = 'dashboard'; lastAct = Date.now(); render(); window.scrollTo(0,0); return; }
+    mpin.err = 'Code manager incorrect.';
+  }
+  paint('mPanel', mgrPanel());
+}
+function kioskAction(type){
+  const e = empById(kiosk.emp); if (!e) return;
+  const ts = Date.now();
+  state.punches.push({id:uid(), emp:e.id, ts, type, src:'borne'}); mutate();
+  let title, msg = '', warn = '';
+  if (type === 'in'){ title = 'Arrivée enregistrée'; msg = `Bon service, ${e.first} !`;
+    const all = sessionsOf(e.id), ss = all[all.length-1], sh = ss && shiftForSession(ss);
+    if (sh){ const late = Math.round((ts - shiftTimes(sh).s)/60000); if (late > state.company.lateTol) warn = `Retard de ${late} min signalé au manager`; } }
+  else if (type === 'break_start'){ title = 'Bonne pause'; msg = 'Pense à pointer ton retour.'; }
+  else if (type === 'break_end'){ title = 'Retour de pause enregistré'; msg = 'Bon retour en service.'; }
+  else { title = 'Départ enregistré'; const w = sessionsOf(e.id).filter(s => s.date === todayKey() || s.end === ts).reduce((t,s) => t + (s.end != null ? ivMin(workIntervals(s)) : 0), 0); msg = `${fmtH(w)} travaillées aujourd'hui. À bientôt ${e.first} !`; }
+  kiosk.emp = null; kiosk.done = {title, msg, warn, ts};
+  paint('kPanel', kioskPanel()); idle(4000);
+}
+
+/* ================= public planning (no code) ================= */
+function pubPlanningHTML(){
+  const c = state.company, tk = todayKey(), now = Date.now();
+  const mon = parseD(ui.pubWeek), keys = [...Array(7)].map((_,i) => dkey(addDays(mon,i)));
+  const emps = state.employees.slice().sort((a,b) => POSTES.indexOf(a.poste)-POSTES.indexOf(b.poste) || a.first.localeCompare(b.first));
+  let body, title;
+  if (ui.pubMode === 'day'){
+    const k = keys.includes(ui.pubDay) ? ui.pubDay : keys[0];
+    title = cap(dLong(parseD(k)));
+    const list = state.shifts.filter(s => s.date === k && empById(s.emp)).sort((a,b) => a.start.localeCompare(b.start) || empById(a.emp).first.localeCompare(empById(b.emp).first));
+    const abs = state.employees.filter(e => absenceOn(e.id, k));
+    body = `<div class="dtabs" role="group" aria-label="Jour">${keys.map((kk,i) => `<button data-act="pday" data-k="${kk}" aria-pressed="${kk===k}" class="${kk===tk?'is-today':''}">${DAYS[i]}<b>${parseD(kk).getDate()}</b></button>`).join('')}</div>
+      <section class="card"><div class="slots">${list.length ? list.map(s => { const e = empById(s.emp), t = shiftTimes(s), live = k === tk && now >= t.s && now < t.e;
+        return `<div class="slot ${live?'now':''}"><span class="when">${s.start}<span>–</span>${s.end}</span>${avatar(e)}<div class="grow"><b>${esc(fullName(e))}</b></div>${live?'<span class="chip ok">En cours</span>':''}<span class="chip plain ${PCLASS[s.poste]}">${esc(s.poste)}</span></div>`; }).join('') : '<p class="empty" style="padding:18px">Personne au planning ce jour-là.</p>'}</div></section>
+      ${abs.length ? `<p class="note">Absents : ${abs.map(e => `${esc(fullName(e))} (${ABS_LABEL[absenceOn(e.id,k).type].toLowerCase()})`).join(', ')}</p>` : ''}`;
+  } else {
+    title = `Semaine ${isoWeek(mon)}`;
+    body = `<section class="card"><div class="tw"><table class="t plan-t">
+      <thead><tr><th>Employé</th>${keys.map((k,i) => `<th class="day ${k===tk?'today':''}">${DAYS[i]}<b>${parseD(k).getDate()}</b></th>`).join('')}</tr></thead>
+      <tbody>${emps.map(e => { const tot = keys.reduce((t,k) => t + shiftsOn(e.id,k).reduce((u,s) => u+dur(s.start,s.end),0), 0);
+        return `<tr><td><div class="who">${avatar(e)}<div><b>${esc(fullName(e))}</b><span>${esc(e.poste)} · <span class="tot">${fmtH(tot)}</span></span></div></div></td>
+        ${keys.map(k => { const ab = absenceOn(e.id,k), shs = shiftsOn(e.id,k);
+          return `<td class="${k===tk?'today':''}"><div class="cell">${ab?`<span class="shift abs">${ABS_LABEL[ab.type].replace(' non rémunérée','')}</span>`:''}${shs.map(s => `<span class="shift ${PCLASS[s.poste]||'p1'}">${s.start}–${s.end}</span>`).join('')}${!ab && !shs.length ? '<span class="repos">Repos</span>' : ''}</div></td>`; }).join('')}</tr>`; }).join('')}</tbody>
+    </table></div></section>`;
+  }
+  return `<div class="home pub">
+    <header class="topbar">${LOGO}<span class="site">${esc(c.name)} · Planning</span><button class="btn ghost sm" data-act="go-home">${ico('home')} Accueil</button></header>
+    <div style="display:grid;gap:16px;align-content:start;min-width:0">
+      <div class="page-head"><div><p class="eyebrow">Planning de l'équipe</p><h1>${title}</h1></div>
+        <div class="actions"><div class="seg" role="group" aria-label="Affichage"><button data-act="pmode" data-m="day" aria-pressed="${ui.pubMode==='day'}">Jour</button><button data-act="pmode" data-m="week" aria-pressed="${ui.pubMode==='week'}">Semaine</button></div></div></div>
+      <div class="toolbar">${weekNav(ui.pubWeek,'pweek')}<button class="btn sm" data-act="pweek-today">Aujourd'hui</button>
+        <div class="legend" style="margin-left:auto">${POSTES.map(p => `<span><i class="${PCLASS[p]}"></i>${p}</span>`).join('')}</div></div>
+      ${body}
+    </div>
+    <p class="foot">Planning mis à jour par les managers. Retour automatique à l'accueil après 2 min.</p>
+  </div>`;
+}
+
+/* ================= manager shell ================= */
+function shellHTML(){
+  const me = empById(mgr), n = pendingCount();
+  return `<div class="shell">
+    <aside class="side">
+      <div class="side-top">${LOGO}<button class="btn ghost sm mob-only" data-act="lock">${ico('lock')} Verrouiller</button></div>
+      <div class="space">${ico('shield')}<span>Espace manager</span><small>${esc(state.company.name)}</small></div>
+      <nav class="nav" aria-label="Navigation">${NAV.map(([id,l]) => `<button data-act="nav" data-v="${id}" ${view===id?'aria-current="page"':''}>${ico(id)}<span>${l}</span>${id==='controle'&&n?`<span class="count">${n}</span>`:''}</button>`).join('')}</nav>
+      <div class="me">${me ? avatar(me) : ''}<div class="who"><b>${esc(fullName(me))}</b><span>${ROLE_LABEL[me?.role]||''}</span></div><button class="btn ghost icon sm" data-act="lock" title="Verrouiller" aria-label="Verrouiller l'espace manager">${ico('lock')}</button></div>
+    </aside>
+    <main class="main" id="main">${VIEWS[view]()}</main>
+  </div>`;
+}
+const VIEWS = {};
+
+VIEWS.dashboard = function(){
+  const now = new Date(), tk = todayKey(), me = empById(mgr);
+  const team = state.employees.map(e => ({e, st:empStatus(e)})).filter(x => x.st);
+  const order = {retard:0, manque:1, service:2, pause:3, attendu:4, termine:5, abs:6};
+  team.sort((a,b) => order[a.st.k]-order[b.st.k] || a.e.first.localeCompare(b.e.first));
+  const n = k => team.filter(x => x.st.k === k).length;
+  const pend = pendingCount();
+  const days = [...Array(7)].map((_,i) => dkey(addDays(now, -i)));
+  return `
+  <div class="page-head"><div><p class="eyebrow">${cap(dLong(now))}</p><h1>Bonjour ${esc(me ? me.first : '')}</h1></div><div class="live" aria-label="Heure actuelle">${hm(now)}</div></div>
+  <div class="stats">
+    <div class="stat"><span class="v">${n('service')}</span><span class="l">En service</span></div>
+    <div class="stat"><span class="v">${n('pause')}</span><span class="l">En pause</span></div>
+    <div class="stat"><span class="v">${n('attendu') + n('retard')}</span><span class="l">Encore attendus</span></div>
+    <button class="stat ${pend?'alert':''}" data-act="go-ctrl" data-date="${tk}"><span class="v">${pend}</span><span class="l">Oublis de pointage à corriger</span></button>
+  </div>
+  <div class="cols">
+    <section class="card"><div class="card-h"><h2>En ce moment</h2><span class="muted" style="font-size:.8rem">${team.length} au planning aujourd'hui</span></div>
+      <div class="card-b"><div class="list">
+      ${team.length ? team.map(({e,st}) => { const shs = shiftsOn(e.id, tk);
+        return `<div class="row click" data-act="edit-punches" data-emp="${e.id}" data-date="${tk}">${avatar(e)}<div class="grow"><b>${esc(fullName(e))}</b><span class="mono">${shs.length ? shs.map(s => s.start+'–'+s.end).join(' / ') : 'hors planning'}</span></div>${statusChip(st)}</div>`; }).join('') : `<p class="empty">Personne n'est prévu aujourd'hui.</p>`}
+      </div></div></section>
+    <section class="card"><div class="card-h"><h2>Correction des pointages</h2><span class="muted" style="font-size:.8rem">7 derniers jours</span></div>
+      <div class="card-b"><div class="list">
+      ${days.map(k => { const st = dayStatus(k);
+        return `<div class="row click" data-act="go-ctrl" data-date="${k}"><span class="av ${st.k==='bad'?'p2':st.k==='validated'?'p4':'p3'}">${ico(st.k==='validated'?'check':st.k==='bad'?'warn':'controle',2)}</span><div class="grow"><b>${k===tk?"Aujourd'hui":cap(dLong(parseD(k)))}</b><span>${st.k==='validated'?`Validée par ${esc(st.by.by)} à ${hm(st.by.ts)}`:st.warn?`${st.warn} retard${st.warn>1?'s':''} ou départ anticipé`:'Aucun retard'}</span></div>${dayChip(st)}</div>`; }).join('')}
+      </div></div></section>
+  </div>`;
+};
+
+VIEWS.controle = function(){
+  const k = ui.day, d = parseD(k), rows = dayReport(k), st = dayStatus(k);
+  const nErr = rows.filter(r => r.probs.some(p => p.kind !== 'open')).length;
+  let banner;
+  if (st.k === 'validated') banner = `<div class="banner ok"><span class="bi">${ico('check',2.2)}</span><div class="grow"><b>Journée validée</b><span>Par ${esc(st.by.by)} à ${hm(st.by.ts)}. Les heures partent en paie.</span></div><button class="btn sm" data-act="unvalidate">Rouvrir</button></div>`;
+  else if (st.k === 'bad') banner = `<div class="banner warn"><span class="bi">${SIGN}</span><div class="grow"><b>${st.bad} pointage${st.bad>1?'s':''} à corriger</b><span>Cliquez sur la ligne concernée pour ajouter l'heure manquante.</span></div></div>`;
+  else if (st.k === 'live') banner = `<div class="banner info"><span class="bi">${ico('clock',2.2)}</span><div class="grow"><b>Journée en cours</b><span>La validation sera possible quand tout le monde aura pointé son départ.</span></div></div>`;
+  else if (st.k === 'ready') banner = `<div class="banner ok"><span class="bi">${ico('check',2.2)}</span><div class="grow"><b>Aucun oubli de pointage</b><span>${st.warn ? `${st.warn} retard${st.warn>1?'s':''} ou départ anticipé à vérifier, puis validez.` : 'Tout est bon, vous pouvez valider la journée.'}</span></div><button class="btn primary" data-act="validate">${ico('check',2.2)} Valider la journée</button></div>`;
+  else banner = '';
+  const NONE = '<span class="zero">—</span>';
+  const tmc = (cls, ts, p) => `<span class="${cls}${p && p.src === 'manager' ? ' mod' : ''}" ${p && p.src === 'manager' ? 'title="Corrigé par un manager"' : ''}>${hm(ts)}</span>`;
+  const body = rows.map(r => {
+    const errs = r.probs.filter(p => p.kind !== 'open');
+    const open = r.probs.some(p => p.kind === 'open');
+    const lateS = new Set(r.probs.filter(p => p.kind === 'late').map(p => p.ref)), earlyS = new Set(r.probs.filter(p => p.kind === 'early').map(p => p.ref));
+    const per = fn => r.ss.length ? r.ss.map(s => `<span class="line">${fn(s)}</span>`).join('') : NONE;
+    const find = (s, t) => s.punches.filter(p => p.type === t);
+    const arr = per(s => tmc(lateS.has(s) ? 'w' : '', s.start, s.punches[0]));
+    const brk = per(s => { const b = find(s,'break_start'); return b.length ? b.map(p => tmc('', p.ts, p)).join(' · ') : NONE; });
+    const ret = per(s => { if (!s.breaks.length) return NONE; const be = find(s,'break_end'); return s.breaks.map((b,i) => b.e ? tmc('', b.e, be[i]) : (s.end || isMissingOut(s)) ? '<span class="w q">?</span>' : '<span class="zero">…</span>').join(' · '); });
+    const dep = per(s => s.end ? tmc(earlyS.has(s) ? 'w' : '', s.end, find(s,'out')[0]) : isMissingOut(s) ? '<span class="w q">?</span>' : '<span class="zero">…</span>');
+    let state;
+    if (errs.length) state = `<span class="msg">${errs.map(p => esc(p.text)).join('<br>')}</span>${SIGN}`;
+    else if (r.ab && !r.ss.length) state = `<span class="msg n">${ABS_LABEL[r.ab.type]}</span><span class="neutral">${ico('cal',2)}</span>`;
+    else if (open) state = `<span class="msg n">En service</span><span class="neutral">${ico('clock',2)}</span>`;
+    else if (!r.ss.length) state = `<span class="msg n">À venir</span><span class="neutral">${ico('clock',2)}</span>`;
+    else state = `<span class="okc" aria-label="Tout est bon">${ico('check',3)}</span>`;
+    return `<tr class="${errs.length ? 'has-err' : ''}" data-act="edit-punches" data-emp="${r.emp.id}" data-date="${k}" tabindex="0">
+      <td class="name"><b>${esc(fullName(r.emp))}</b><span>${r.shs.length ? r.shs.map(s => s.start+'–'+s.end).join(' / ') : r.ab ? '' : 'hors planning'}</span></td>
+      <td class="tm" data-l="Arrivée">${arr}</td><td class="tm" data-l="Pause">${brk}</td><td class="tm" data-l="Retour">${ret}</td><td class="tm" data-l="Départ">${dep}</td>
+      <td class="tot" data-l="Total">${r.worked ? fmtH(r.worked) : NONE}</td>
+      <td class="st">${state}</td></tr>`;
+  }).join('');
+  return `
+  <div class="page-head"><div><p class="eyebrow">Correction</p><h1>${cap(dLong(d))}</h1></div>
+    <div class="actions"><div class="navgrp"><button class="btn ghost icon sm" data-act="day" data-d="-1" aria-label="Jour précédent">${ico('left')}</button><input class="inp" type="date" id="day-pick" value="${k}" style="height:32px;border:0;width:auto;background:transparent" aria-label="Date"><button class="btn ghost icon sm" data-act="day" data-d="1" aria-label="Jour suivant">${ico('right')}</button></div><button class="btn sm" data-act="day-today">Aujourd'hui</button></div></div>
+  ${banner}
+  <section class="card"><div class="tw"><table class="t corr">
+    <thead><tr><th>Employé</th><th>Arrivée</th><th>Pause</th><th>Retour</th><th>Départ</th><th class="n">Total</th><th class="n">${rows.length ? (nErr ? `${nErr} à vérifier` : 'Tout est bon') : ''}</th></tr></thead>
+    <tbody>${body || `<tr><td colspan="7" class="empty" style="padding:18px 14px">Aucun shift ni pointage ce jour-là.</td></tr>`}</tbody>
+  </table></div></section>
+  <p class="note">Cliquez sur une ligne pour corriger. <b style="color:var(--warn)">?</b> = pointage manquant · heure en orange = retard ou départ en avance · heure soulignée = corrigée par un manager.</p>`;
+};
+
+VIEWS.equipe = function(){
+  const emps = state.employees.slice().sort((a,b) => (isMgrRole(b.role)-isMgrRole(a.role)) || a.first.localeCompare(b.first));
+  const hide = ui.hideCodes;
+  return `
+  <div class="page-head"><div><p class="eyebrow">Équipe & codes</p><h1>${emps.length} personnes</h1></div>
+    <div class="actions"><button class="btn" data-act="toggle-codes">${ico('eye')} ${hide?'Afficher':'Masquer'} les codes</button><button class="btn" data-act="copy-codes">${ico('copy')} Copier la liste</button><button class="btn primary" data-act="new-emp">${ico('plus',2.2)} Ajouter</button></div></div>
+  <div class="toolbar"><input class="inp" id="team-q" type="search" placeholder="Rechercher un nom, un poste ou un code…" style="max-width:340px" aria-label="Rechercher"></div>
+  <section class="card"><div class="tw"><table class="t" style="min-width:820px">
+    <thead><tr><th>Employé</th><th>Poste</th><th>Code de pointage</th><th>Code manager</th><th>Aujourd'hui</th><th class="n">Contrat</th><th class="n">Taux</th><th></th></tr></thead>
+    <tbody>${emps.map(e => { const st = empStatus(e);
+      return `<tr data-q="${esc(norm(fullName(e)+' '+e.poste+' '+ROLE_LABEL[e.role]+' '+e.pin+' '+matStr(e)))}"><td><div class="who">${avatar(e)}<div><b>${esc(fullName(e))}</b><span>${matStr(e)} · ${ROLE_LABEL[e.role]}</span></div></div></td>
+      <td><span class="chip plain ${PCLASS[e.poste]}">${esc(e.poste)}</span></td>
+      <td><span class="code">${hide?'••••':esc(e.pin)}</span></td>
+      <td>${isMgrRole(e.role) && e.mpin ? `<span class="code mgr">${hide?'••••••':esc(e.mpin)}</span>` : '<span class="zero">—</span>'}</td>
+      <td>${st ? statusChip(st) : '<span class="zero">Repos</span>'}</td>
+      <td class="n">${e.contract}h</td><td class="n">${eur(e.rate)}</td>
+      <td><button class="btn sm" data-act="edit-emp" data-id="${e.id}">Modifier</button></td></tr>`; }).join('')}</tbody>
+  </table></div></section>
+  <p class="note">Le code de pointage sert à la borne Employé. Le code manager à 6 chiffres ouvre cet espace ; il n'existe que pour les gérants et managers.</p>`;
+};
+
+VIEWS.planning = function(){
+  const mon = parseD(ui.week), days = [...Array(7)].map((_,i) => addDays(mon,i)), keys = days.map(dkey), tk = todayKey();
+  const emps = state.employees.slice().sort((a,b) => POSTES.indexOf(a.poste)-POSTES.indexOf(b.poste) || a.first.localeCompare(b.first));
+  const dayTot = keys.map(k => state.shifts.filter(s => s.date === k).reduce((t,s) => t+dur(s.start,s.end), 0));
+  const dayHead = keys.map(k => new Set(state.shifts.filter(s => s.date === k).map(s => s.emp)).size);
+  return `
+  <div class="page-head"><div><p class="eyebrow">Planning</p><h1>Planning de l'équipe</h1></div>
+    <div class="actions"><button class="btn" data-act="nav" data-v="sync">${ico('upload')} Importer</button><button class="btn" data-act="copy-week">${ico('copy')} Copier la semaine précédente</button><button class="btn primary" data-act="new-shift">${ico('plus',2.2)} Ajouter un shift</button></div></div>
+  <div class="toolbar">${weekNav(ui.week)}<button class="btn sm" data-act="week-today">Cette semaine</button>
+    <div class="legend" style="margin-left:auto">${POSTES.map(p => `<span><i class="${PCLASS[p]}"></i>${p}</span>`).join('')}</div></div>
+  <section class="card"><div class="tw"><table class="t plan-t">
+    <thead><tr><th>Employé</th>${days.map((d,i) => `<th class="day ${keys[i]===tk?'today':''}">${DAYS[i]}<b>${d.getDate()}</b></th>`).join('')}</tr></thead>
+    <tbody>${emps.map(e => { const tot = keys.reduce((t,k) => t + shiftsOn(e.id,k).reduce((u,s) => u+dur(s.start,s.end),0), 0), cm = e.contract*60;
+      const cls = tot > cm + 60 ? 'over' : tot < cm - 60 ? 'under' : 'ok';
+      return `<tr><td><div class="who">${avatar(e)}<div><b>${esc(fullName(e))}</b><span>${esc(e.poste)} · <span class="tot ${cls}">${fmtH(tot)} / ${e.contract}h</span></span></div></div></td>
+      ${keys.map(k => { const ab = absenceOn(e.id,k), shs = shiftsOn(e.id,k);
+        return `<td class="${k===tk?'today':''}"><div class="cell">${ab?`<span class="shift abs">${ABS_LABEL[ab.type].replace(' non rémunérée','')}</span>`:''}${shs.map(s => `<button class="shift ${PCLASS[s.poste]||'p1'}" data-act="edit-shift" data-id="${s.id}">${s.start}–${s.end}${s.poste!==e.poste?`<small>${esc(s.poste)}</small>`:''}</button>`).join('')}${!ab ? `<button class="addc" data-act="new-shift" data-emp="${e.id}" data-date="${k}" aria-label="Ajouter un shift">+</button>`:''}</div></td>`; }).join('')}</tr>`; }).join('')}</tbody>
+    <tfoot><tr><td>Total</td>${keys.map((k,i) => `<td><span class="tot">${fmtH(dayTot[i])}</span><br><span class="muted" style="font-size:.72rem;font-weight:500">${dayHead[i]} pers.</span></td>`).join('')}</tr></tfoot>
+  </table></div></section>
+  <p class="note">Les totaux incluent les pauses prévues. En vert : conforme au contrat, en orange : plus d'1h au-dessus.</p>`;
+};
+
+VIEWS.absences = function(){
+  const list = state.absences.slice().sort((a,b) => b.from.localeCompare(a.from));
+  const days = a => { let n = 0; for (let d = parseD(a.from); dkey(d) <= a.to; d = addDays(d,1)) if (d.getDay() !== 0) n++; return n; };
+  return `
+  <div class="page-head"><div><p class="eyebrow">Absences</p><h1>Congés, maladie et absences</h1></div>
+    <div class="actions"><button class="btn primary" data-act="new-abs">${ico('plus',2.2)} Déclarer une absence</button></div></div>
+  <section class="card"><div class="tw"><table class="t" style="min-width:680px">
+    <thead><tr><th>Employé</th><th>Type</th><th>Du</th><th>Au</th><th class="n">Jours</th><th class="n">Heures</th><th></th></tr></thead>
+    <tbody>${list.length ? list.map(a => { const e = empById(a.emp); if (!e) return ''; const n = days(a);
+      return `<tr><td><div class="who">${avatar(e)}<div><b>${esc(fullName(e))}</b><span>${esc(e.poste)}</span></div></div></td><td><span class="chip ${ABS_CHIP[a.type]}">${ABS_LABEL[a.type]}</span></td><td>${dShort(parseD(a.from))}</td><td>${dShort(parseD(a.to))}</td><td class="n">${n}</td><td class="n">${fmtH(n*a.hpd*60)}</td><td><button class="btn sm danger" data-act="del-abs" data-id="${a.id}">Supprimer</button></td></tr>`; }).join('') : `<tr><td colspan="7" class="empty" style="padding:18px 12px">Aucune absence déclarée.</td></tr>`}</tbody>
+  </table></div></section>
+  <p class="note">Les dimanches ne sont pas décomptés. Les congés payés sont valorisés dans le brut estimé ; la maladie et les absences sont transmises au logiciel de paie.</p>`;
+};
+
+function payTable(rows, tot, first){
+  const c = state.company, td = v => `<td class="n">${v ? fmtH(v) : '<span class="zero">—</span>'}</td>`;
+  return `<table class="t" style="min-width:1180px">
+    <thead><tr><th>${first}</th><th class="n">Travaillé</th><th class="n">Normales</th><th class="n">Comp. +${c.compRate}%</th><th class="n">Sup. +${c.sup1Rate}%</th><th class="n">Sup. +${c.sup2Rate}%</th><th class="n">Nuit</th><th class="n">Dimanche</th><th class="n">Congés</th><th class="n">Maladie</th><th class="n">Abs.</th><th class="n">Oublis</th><th class="n">Brut estimé</th></tr></thead>
+    <tbody>${rows.map(r => `<tr>${r.head}${td(r.worked)}${td(r.normal)}${td(r.comp)}${td(r.sup1)}${td(r.sup2)}${td(r.night)}${td(r.sunday)}${td(r.conge)}${td(r.maladie)}${td(r.absence)}<td class="n">${r.anomalies?`<span class="chip bad">${r.anomalies}</span>`:'<span class="zero">0</span>'}</td><td class="n"><b>${eur(r.brut)}</b></td></tr>`).join('')}</tbody>
+    ${tot?`<tfoot><tr><td>Total</td>${['worked','normal','comp','sup1','sup2','night','sunday','conge','maladie','absence'].map(k => `<td class="n">${fmtHz(tot[k])}</td>`).join('')}<td class="n">${tot.anomalies}</td><td class="n">${eur(tot.brut)}</td></tr></tfoot>`:''}
+  </table>`;
+}
+VIEWS.paie = function(){
+  const [y,m] = ui.month, weeks = monthWeeks(y,m);
+  const data = state.employees.map(e => ({e, s:empPay(e, weeks)}));
+  const tot = sumStats(data.map(x => x.s));
+  const first = weeks.length ? parseD(weeks[0]) : null, last = weeks.length ? addDays(parseD(weeks[weeks.length-1]),6) : null;
+  const rows = data.map(({e,s}) => ({...s, head:`<td><div class="who" style="cursor:pointer" data-act="pay-detail" data-id="${e.id}">${avatar(e)}<div><b>${esc(fullName(e))}</b><span>${e.contract}h · ${eur(e.rate)}/h · <u>détail</u></span></div></div></td>`}));
+  return `
+  <div class="page-head"><div><p class="eyebrow">Paie</p><h1>Variables de paie</h1></div>
+    <div class="actions">${monthNav()}<button class="btn primary" data-act="nav" data-v="sync">${ico('sync')} Envoyer à la paie</button></div></div>
+  <div class="stats">
+    <div class="stat"><span class="v">${fmtH(tot.worked)}</span><span class="l">Heures travaillées</span></div>
+    <div class="stat"><span class="v">${fmtH(tot.comp+tot.sup1+tot.sup2)}</span><span class="l">Heures comp. et sup.</span></div>
+    <div class="stat"><span class="v">${fmtH(tot.night)}</span><span class="l">Heures de nuit (${esc(state.company.nightStart)}–${esc(state.company.nightEnd)})</span></div>
+    <div class="stat"><span class="v" style="font-size:1.55rem">${eur(tot.brut)}</span><span class="l">Brut estimé</span></div>
+  </div>
+  ${tot.anomalies ? `<div class="banner bad"><span class="bi">${ico('warn',2.2)}</span><div class="grow"><b>${tot.anomalies} départ${tot.anomalies>1?'s':''} non pointé${tot.anomalies>1?'s':''} sur la période</b><span>Ces heures ne sont pas comptées tant qu'elles ne sont pas corrigées dans Correction.</span></div><button class="btn sm" data-act="nav" data-v="controle">Corriger</button></div>` : ''}
+  <section class="card"><div class="card-h"><h2>${monthName(y,m)}</h2><span class="muted" style="font-size:.8rem">${first ? `Semaines du ${dShort(first)} au ${dShort(last)}` : 'Aucune semaine'}</span></div>
+    <div class="tw">${payTable(rows, tot, 'Employé')}</div></section>
+  <p class="note">Chaque semaine est rattachée au mois où elle se termine. Heures comp. : temps partiels au-delà du contrat ; sup. : au-delà de ${state.company.legalWeek}h, +${state.company.sup1Rate}% sur les ${state.company.sup1Cap} premières puis +${state.company.sup2Rate}%. Le brut est une estimation ; cotisations et fiche de paie sont faites dans votre logiciel de paie.</p>`;
+};
+
+VIEWS.sync = function(){
+  const c = state.company, [y,m] = ui.month;
+  const fmts = [['vars','Variables de paie','Une ligne par employé et par rubrique (HN, HS25…). Le format accepté par la plupart des logiciels de paie.'],['recap','Récapitulatif mensuel','Une ligne par employé avec toutes les colonnes. Idéal pour le comptable ou Excel.'],['punch','Pointages détaillés','Une ligne par pointage avec l\'heure exacte et la source (borne ou correction).']];
+  return `
+  <div class="page-head"><div><p class="eyebrow">Synchronisation</p><h1>Reliez Horodia à vos logiciels</h1></div></div>
+  <div class="cols even">
+    <section class="card"><div class="card-h"><div><p class="eyebrow">Logiciel de planning → Horodia</p><h2>Importer un planning</h2></div></div>
+      <div class="card-b" style="display:grid;gap:14px">
+        <ol class="steps"><li>Dans votre logiciel de planning, exportez la semaine en CSV ou Excel (CSV).</li><li>Déposez le fichier ici ou collez son contenu.</li><li>Vérifiez les lignes reconnues puis importez.</li></ol>
+        <div class="drop" id="drop">
+          <input type="file" id="imp-file" accept=".csv,.txt,text/csv" class="inp" style="height:auto;padding:8px" aria-label="Fichier CSV">
+          <textarea class="inp" id="imp-text" placeholder="Employé;Date;Début;Fin;Poste&#10;Léa Dubois;03/11/2026;11:00;15:00;Caisse"></textarea>
+          <div style="display:flex;flex-wrap:wrap;gap:8px"><button class="btn primary" data-act="imp-parse">Analyser</button><button class="btn" data-act="imp-example">Charger un exemple</button><button class="btn ghost" data-act="dl-template">${ico('download')} Modèle CSV</button></div>
+        </div>
+        <div id="imp-preview">${impPreview()}</div>
+      </div></section>
+    <section class="card"><div class="card-h"><div><p class="eyebrow">Horodia → Logiciel de paie</p><h2>Envoyer les heures</h2></div>${monthNav()}</div>
+      <div class="card-b" style="display:grid;gap:14px">
+        <div class="fmt" role="radiogroup" aria-label="Format">${fmts.map(([v,t,d]) => `<label><input type="radio" name="fmt" value="${v}" ${ui.fmt===v?'checked':''}><b>${t}</b><span>${d}</span></label>`).join('')}</div>
+        <details ${ui.fmt==='vars'?'open':''}><summary style="cursor:pointer;font-weight:600;font-size:.88rem">Codes des rubriques de paie</summary>
+          <form id="codesForm" style="display:grid;gap:10px;margin-top:10px"><p class="hint">Remplacez par les codes utilisés dans votre logiciel de paie.</p>
+            <div class="codes">${RUBRICS.map(([k,l]) => `<label class="f">${l}<input class="inp mono" id="code-${k}" name="${k}" value="${esc(c.codes[k])}"></label>`).join('')}</div>
+            <button class="btn sm" type="submit" style="justify-self:start">Enregistrer les codes</button></form></details>
+        <button class="btn primary" data-act="export" style="height:44px">${ico('download',2)} Exporter ${monthName(y,m)}</button>
+      </div></section>
+  </div>
+  <section class="card"><div class="card-h"><div><p class="eyebrow">Version en ligne</p><h2>Connexion automatique</h2></div><span class="chip info">Disponible avec l'abonnement en ligne</span></div>
+    <div class="card-b" style="display:grid;gap:12px"><p class="muted" style="max-width:75ch">Une fois Horodia hébergé, la connexion se fait une seule fois avec la clé API de chaque logiciel. Ensuite, plus besoin de fichiers.</p>
+      <div class="api"><div><span class="ai">${ico('planning')}</span><div><b>Planning synchronisé chaque nuit</b><span>Les shifts créés dans votre logiciel de planning arrivent tout seuls dans Horodia, et les modifications sont mises à jour.</span></div></div>
+        <div><span class="ai">${ico('paie')}</span><div><b>Heures envoyées à la clôture</b><span>Les journées validées partent vers le logiciel de paie à la fin du mois, avec vos codes de rubriques.</span></div></div></div></div></section>
+  <section class="card"><div class="card-h"><h2>Historique</h2></div><div class="card-b"><div class="list">
+    ${state.syncLog.length ? state.syncLog.slice().reverse().slice(0,12).map(l => `<div class="row"><span class="av ${l.kind==='import'?'p3':'p4'}">${ico(l.kind==='import'?'upload':'download',2)}</span><div class="grow"><b>${esc(l.label)}</b><span>${cap(dShort(new Date(l.ts)))} à ${hm(l.ts)} · ${esc(l.by)}</span></div></div>`).join('') : '<p class="empty">Aucun import ni export pour le moment.</p>'}
+  </div></div></section>`;
+};
+
+VIEWS.reglages = function(){
+  const c = state.company;
+  const f = (id, label, val, type='text', extra='') => `<label class="f">${label}<input class="inp" id="st-${id}" name="${id}" type="${type}" value="${esc(val)}" ${extra}></label>`;
+  return `
+  <div class="page-head"><div><p class="eyebrow">Réglages</p><h1>Votre entreprise</h1></div></div>
+  <form id="settingsForm" style="display:grid;gap:18px">
+    <section class="card"><div class="card-h"><h2>Établissement</h2></div><div class="card-b" style="display:grid;gap:14px">
+      <div class="grid2">${f('name','Nom',c.name)}${f('city','Ville',c.city)}</div>
+      <div class="grid2">${f('sector','Secteur',c.sector)}${f('ccn','Convention collective',c.ccn)}</div></div></section>
+    <section class="card"><div class="card-h"><h2>Temps de travail et contrôle</h2></div><div class="card-b grid3">
+      ${f('legalWeek','Durée hebdo de référence (h)',c.legalWeek,'number','min="1" max="48" step="0.5"')}
+      ${f('lateTol','Retard toléré (min)',c.lateTol,'number','min="0" max="60"')}
+      ${f('missDelay','Oubli de départ signalé après (min)',c.missDelay,'number','min="5" max="240"')}</div></section>
+    <section class="card"><div class="card-h"><h2>Majorations</h2><span class="hint">Adaptez-les à votre convention collective</span></div><div class="card-b" style="display:grid;gap:14px">
+      <div class="grid3">${f('compRate','Heures complémentaires (%)',c.compRate,'number','min="0" max="100"')}${f('sup1Rate','Heures sup. 1er palier (%)',c.sup1Rate,'number','min="0" max="200"')}${f('sup1Cap','Durée du 1er palier (h)',c.sup1Cap,'number','min="0" max="20"')}</div>
+      <div class="grid3">${f('sup2Rate','Heures sup. au-delà (%)',c.sup2Rate,'number','min="0" max="200"')}${f('sundayRate','Travail le dimanche (%)',c.sundayRate,'number','min="0" max="200"')}${f('nightRate','Travail de nuit (%)',c.nightRate,'number','min="0" max="200"')}</div>
+      <div class="grid3">${f('nightStart','Nuit : début',c.nightStart,'time')}${f('nightEnd','Nuit : fin',c.nightEnd,'time')}</div></div></section>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center">
+      <button class="btn danger" type="button" data-act="reset-demo">Réinitialiser la démo</button>
+      <button class="btn primary" type="submit">Enregistrer les réglages</button></div>
+  </form>`;
+};
+
+/* ================= import ================= */
+function splitCSV(text){
+  text = text.replace(/^﻿/,'');
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  if (!lines.length) return [];
+  const delim = [';','\t',','].map(d => [d, lines[0].split(d).length]).sort((a,b) => b[1]-a[1])[0][0];
+  return lines.map(l => { const out = []; let cur = '', q = false;
+    for (let i = 0; i < l.length; i++){ const ch = l[i];
+      if (q){ if (ch === '"'){ if (l[i+1] === '"'){ cur += '"'; i++; } else q = false; } else cur += ch; }
+      else if (ch === '"') q = true; else if (ch === delim){ out.push(cur); cur = ''; } else cur += ch; }
+    out.push(cur); return out.map(s => s.trim()); });
+}
+function parseDateStr(s){ s = String(s).trim(); let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/); if (m) return `${m[1]}-${pad(+m[2])}-${pad(+m[3])}`;
+  m = s.match(/(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/); if (m){ let y = +m[3]; if (y < 100) y += 2000; const d = new Date(y, +m[2]-1, +m[1]); if (d.getDate() === +m[1]) return dkey(d); } return null; }
+function parseTimeStr(s){ const m = String(s).trim().match(/^(\d{1,2})\s*[:hH]\s*(\d{2})?$/); if (!m) return null; const h = +m[1], mi = +(m[2]||0); if (h > 24 || mi > 59) return null; return pad(h%24)+':'+pad(mi); }
+function matchEmp(name){ const n = norm(name); if (!n) return null;
+  let e = state.employees.find(x => norm(x.first+' '+x.last) === n || norm(x.last+' '+x.first) === n); if (e) return e;
+  const byFirst = state.employees.filter(x => norm(x.first) === n); return byFirst.length === 1 ? byFirst[0] : null; }
+function analyseImport(text){
+  const rows = splitCSV(text); if (rows.length < 2) return {err:'Le fichier doit contenir une ligne d\'en-tête et au moins une ligne de planning.'};
+  const h = rows[0].map(norm);
+  const idx = (...keys) => h.findIndex(x => keys.some(k => x === k || x.includes(k)));
+  const col = { full: idx('employe','collaborateur','salarie','nom complet','personne','agent'), first: idx('prenom'), last: h.findIndex(x => x === 'nom' || x === 'nom de famille'), date: idx('date','jour'), start: idx('debut','start','arrivee'), end: idx('fin','end','depart'), poste: idx('poste','fonction','role','service','activite') };
+  if (col.date < 0 || col.start < 0 || col.end < 0 || (col.full < 0 && col.first < 0)) return {err:'Colonnes introuvables. Il faut au minimum : Employé (ou Prénom + Nom), Date, Début, Fin.'};
+  const out = rows.slice(1).map((r, i) => {
+    const name = col.full >= 0 ? r[col.full] : [r[col.first], col.last >= 0 ? r[col.last] : ''].join(' ');
+    const emp = matchEmp(name), date = parseDateStr(r[col.date] || ''), start = parseTimeStr(r[col.start] || ''), end = parseTimeStr(r[col.end] || '');
+    const pv = col.poste >= 0 ? r[col.poste] : ''; const poste = POSTES.find(p => norm(p) === norm(pv)) || (emp ? emp.poste : '');
+    let status = 'ok', msg = '';
+    if (!emp){ status = 'skip'; msg = 'Employé inconnu dans Horodia'; }
+    else if (!date){ status = 'skip'; msg = 'Date illisible'; }
+    else if (!start || !end || start === end){ status = 'skip'; msg = 'Horaire illisible'; }
+    return {line:i+2, name:name.trim(), emp, date, start, end, poste, status, msg};
+  });
+  return {rows:out, ok:out.filter(r => r.status === 'ok').length};
+}
+function impPreview(){
+  if (!imp) return '';
+  if (imp.err) return `<div class="banner bad"><span class="bi">${ico('warn',2.2)}</span><div class="grow"><b>Import impossible</b><span>${esc(imp.err)}</span></div></div>`;
+  if (imp.done) return `<div class="banner ok"><span class="bi">${ico('check',2.2)}</span><div class="grow"><b>${imp.done} shifts importés</b><span>Ils sont visibles dans le planning.</span></div><button class="btn sm" data-act="see-planning">Voir le planning</button></div>`;
+  const skip = imp.rows.length - imp.ok;
+  return `<div style="display:grid;gap:10px">
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="chip ok">${imp.ok} shift${imp.ok>1?'s':''} reconnu${imp.ok>1?'s':''}</span>${skip?`<span class="chip warn">${skip} ligne${skip>1?'s':''} ignorée${skip>1?'s':''}</span>`:''}</div>
+    <div class="tw" style="max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:var(--r)"><table class="t" style="min-width:520px"><thead><tr><th>Ligne</th><th>Employé</th><th>Date</th><th>Horaire</th><th></th></tr></thead><tbody>
+      ${imp.rows.slice(0,80).map(r => `<tr><td class="n">${r.line}</td><td>${r.emp ? esc(fullName(r.emp)) : esc(r.name)}</td><td>${r.date ? dShort(parseD(r.date)) : '—'}</td><td class="mono" style="font-size:.8rem">${r.start||'?'}–${r.end||'?'}</td><td>${r.status==='ok'?'<span class="chip ok">OK</span>':`<span class="chip warn">${esc(r.msg)}</span>`}</td></tr>`).join('')}
+    </tbody></table></div>
+    <label class="check"><input type="checkbox" id="imp-replace" checked> Remplacer les shifts déjà prévus sur ces jours pour ces employés</label>
+    <button class="btn primary" data-act="imp-run" ${imp.ok?'':'disabled'} style="justify-self:start">Importer ${imp.ok} shift${imp.ok>1?'s':''}</button></div>`;
+}
+function exampleCSV(){
+  const mon = addDays(mondayOf(new Date()), 14), fr = d => `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
+  const pick = ['Léa Dubois','Hugo Lefèvre','Karim Benali','Chloé Petit','Lucas Fontaine','Julie Bernard'];
+  const sl = [['11h00','15h00'],['18h30','23h00'],['10h30','18h30'],['17h00','23h30']];
+  const lines = ['Collaborateur;Date;Heure début;Heure fin;Fonction'];
+  pick.forEach((n,i) => { for (let d = 0; d < 7; d++){ if ((d + i) % 3 === 0) continue; const s = sl[(d + i) % sl.length]; lines.push(`${n};${fr(addDays(mon,d))};${s[0]};${s[1]};${i===2?'Management':['Caisse','Cuisine','Caisse','Caisse','Cuisine','Drive'][i]}`); } });
+  return lines.join('\n');
+}
+function runImport(){
+  if (!imp || !imp.rows) return;
+  const ok = imp.rows.filter(r => r.status === 'ok');
+  const replace = $('#imp-replace') ? $('#imp-replace').checked : true;
+  if (replace){ const keys = new Set(ok.map(r => r.emp.id+'|'+r.date)); state.shifts = state.shifts.filter(s => !keys.has(s.emp+'|'+s.date)); }
+  let n = 0;
+  for (const r of ok){ if (!replace && state.shifts.some(s => s.emp === r.emp.id && s.date === r.date && s.start === r.start)) continue; state.shifts.push({id:uid(), emp:r.emp.id, date:r.date, start:r.start, end:r.end, poste:r.poste}); n++; }
+  const dates = ok.map(r => r.date).sort();
+  log('import', `Planning importé : ${n} shifts${dates.length ? ` du ${dShort(parseD(dates[0]))} au ${dShort(parseD(dates[dates.length-1]))}` : ''}`);
+  mutate();
+  imp = {done:n, first:dates[0]};
+  render(); toast(`${n} shifts importés`);
+}
+function log(kind, label){ const me = empById(mgr); state.syncLog.push({ts:Date.now(), kind, label, by:me ? me.first : 'Manager'}); if (state.syncLog.length > 50) state.syncLog.shift(); }
+
+/* ================= export ================= */
+let dlP = null;
+function getDownloads(){ if (!dlP) dlP = (window.claude && typeof window.claude.use === 'function') ? window.claude.use('downloads').catch(() => null) : Promise.resolve(null); return dlP; }
+const n2 = v => (Math.round(v*100)/100).toFixed(2).replace('.',',');
+const q = v => { v = String(v); return /[;"\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; };
+const toCSV = rows => '﻿'+rows.map(r => r.map(q).join(';')).join('\r\n');
+function buildExport(fmt){
+  const [y,m] = ui.month, weeks = monthWeeks(y,m), c = state.company, per = `${y}-${pad(m+1)}`;
+  if (fmt === 'vars'){
+    const rows = [['Matricule','Nom','Prénom','Période','Rubrique','Libellé','Quantité','Unité']];
+    for (const e of state.employees){ const s = empPay(e, weeks); for (const [k,l,f] of RUBRICS){ if (Math.round(s[f])) rows.push([matStr(e), e.last, e.first, per, c.codes[k], l, n2(s[f]/60), 'H']); } }
+    return {name:`horodia_variables-paie_${slug(c.name)}_${per}.csv`, data:toCSV(rows), count:rows.length-1};
+  }
+  if (fmt === 'recap'){
+    const rows = [['Matricule','Nom','Prénom','Poste','Contrat (h/sem)','Taux horaire (€)','Heures travaillées','Heures normales',`Heures comp. +${c.compRate}%`,`Heures sup. +${c.sup1Rate}%`,`Heures sup. +${c.sup2Rate}%`,'Heures de nuit','Heures dimanche','Congés payés (h)','Maladie (h)','Absences non rémunérées (h)','Départs non pointés','Retards','Brut estimé (€)']];
+    for (const e of state.employees){ const s = empPay(e, weeks); rows.push([matStr(e), e.last, e.first, e.poste, n2(e.contract), n2(e.rate), ...['worked','normal','comp','sup1','sup2','night','sunday','conge','maladie','absence'].map(k => n2(s[k]/60)), String(s.anomalies), String(s.late), n2(s.brut)]); }
+    return {name:`horodia_recap_${slug(c.name)}_${per}.csv`, data:toCSV(rows), count:rows.length-1};
+  }
+  const a0 = weeks.length ? parseD(weeks[0]).getTime() : 0, a1 = weeks.length ? addDays(parseD(weeks[weeks.length-1]),7).getTime() : 0;
+  const rows = [['Matricule','Nom','Prénom','Date','Heure','Type','Source']];
+  for (const p of state.punches.filter(p => p.ts >= a0 && p.ts < a1)){ const e = empById(p.emp); if (!e) continue; const d = new Date(p.ts); rows.push([matStr(e), e.last, e.first, `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`, hm(p.ts), PTYPE[p.type], p.src === 'manager' ? 'Correction manager' : 'Borne']); }
+  return {name:`horodia_pointages_${slug(c.name)}_${per}.csv`, data:toCSV(rows), count:rows.length-1};
+}
+async function saveFile(name, data){
+  const dl = await getDownloads();
+  if (dl){
+    try { await dl.save({filename:name, data}); return 'saved'; }
+    catch (e){ if (e && e.code === 'declined') return 'declined'; if (e && e.code === 'rate_limited'){ toast('Un fichier attend déjà votre confirmation'); return 'declined'; } }
+  } else if (!window.claude) {
+    try { const u = URL.createObjectURL(new Blob([data], {type:'text/csv;charset=utf-8'})); const a = document.createElement('a'); a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); return 'saved'; } catch(_){}
+  }
+  openModal(`<div><p class="eyebrow">Fichier</p><h2>${esc(name)}</h2></div><p class="muted" style="font-size:.88rem">Le téléchargement n'est pas disponible dans cette vue. Copiez le contenu ci-dessous dans un fichier .csv ou collez-le directement dans Excel.</p><textarea class="inp" id="csv-out" readonly style="height:220px">${esc(data.replace('﻿',''))}</textarea><div class="modal-actions"><button class="btn" data-act="close-modal">Fermer</button><button class="btn primary" data-act="sel-csv">Tout sélectionner</button></div>`, true);
+  return 'shown';
+}
+async function doExport(){
+  const ex = buildExport(ui.fmt), [y,m] = ui.month;
+  const r = await saveFile(ex.name, ex.data);
+  if (r !== 'declined'){ log('export', `${{vars:'Variables de paie',recap:'Récapitulatif mensuel',punch:'Pointages détaillés'}[ui.fmt]} · ${monthName(y,m)} · ${ex.count} lignes`); mutate(); if (view === 'sync') render(); if (r === 'saved') toast('Fichier prêt pour le logiciel de paie'); }
+}
+
+/* ================= modals ================= */
+function openModal(html, wide){
+  $('#modal-root').innerHTML = `<div class="overlay" id="overlay"><div class="modal ${wide?'wide':''}" role="dialog" aria-modal="true">${html}</div></div>`;
+  modalOpen = true;
+  const f = $('#modal-root').querySelector('input:not([type=hidden]),select,textarea,button'); if (f) f.focus();
+}
+function closeModal(){ $('#modal-root').innerHTML = ''; modalOpen = false; }
+const empOptions = sel => state.employees.map(e => `<option value="${e.id}" ${e.id===sel?'selected':''}>${esc(fullName(e))} · ${esc(e.poste)}</option>`).join('');
+const opt = (list, sel) => list.map(([v,l]) => `<option value="${esc(v)}" ${v===sel?'selected':''}>${esc(l)}</option>`).join('');
+function openShiftModal(id, empId, date){
+  const sh = id ? state.shifts.find(s => s.id === id) : null;
+  const e = empById(sh ? sh.emp : empId) || state.employees[0];
+  const v = sh || {emp:e.id, date: date || dkey(addDays(parseD(ui.week), (new Date().getDay()+6)%7)), start:'11:00', end:'15:00', poste:e.poste};
+  openModal(`<form id="shiftForm" data-id="${sh?sh.id:''}">
+    <div><p class="eyebrow">Planning</p><h2>${sh?'Modifier le shift':'Nouveau shift'}</h2></div>
+    <label class="f">Employé<select class="inp" id="sf-emp" name="emp">${empOptions(v.emp)}</select></label>
+    <label class="f">Date<input class="inp" id="sf-date" name="date" type="date" value="${v.date}" required></label>
+    <div class="grid2"><label class="f">Début<input class="inp" id="sf-start" name="start" type="time" step="300" value="${v.start}" required></label><label class="f">Fin<input class="inp" id="sf-end" name="end" type="time" step="300" value="${v.end}" required></label></div>
+    <label class="f">Poste<select class="inp" id="sf-poste" name="poste">${opt(POSTES.map(p => [p,p]), v.poste)}</select></label>
+    <p class="hint">Une fin plus tôt que le début correspond à un shift qui finit le lendemain (fermeture).</p>
+    <div class="modal-actions">${sh?`<button class="btn danger" type="button" data-act="del-shift" data-id="${sh.id}">Supprimer</button><span class="spacer"></span>`:''}<button class="btn" type="button" data-act="close-modal">Annuler</button><button class="btn primary" type="submit">Enregistrer</button></div>
+  </form>`);
+}
+const punchRow = (type, time) => `<div class="prow"><select class="inp" name="ptype" aria-label="Type">${opt(Object.entries(PTYPE), type)}</select><input class="inp mono" name="ptime" type="time" value="${time}" aria-label="Heure" required><button class="btn ghost icon" type="button" data-act="del-prow" aria-label="Retirer">✕</button></div>`;
+function openPunchEditor(empId, k){
+  const e = empById(empId); if (!e) return;
+  const ids = new Set(), ps = [];
+  for (const s of sessionsOf(e.id).filter(s => s.date === k)) for (const p of s.punches){ ids.add(p.id); ps.push(p); }
+  for (const p of state.punches) if (p.emp === e.id && dkey(new Date(p.ts)) === k && !ids.has(p.id)){ ids.add(p.id); ps.push(p); }
+  ps.sort((a,b) => a.ts - b.ts);
+  const shs = shiftsOn(e.id, k), probs = (dayReport(k).find(r => r.emp.id === e.id) || {probs:[]}).probs.filter(p => p.lvl !== 'info');
+  openModal(`<form id="punchForm" data-emp="${e.id}" data-date="${k}" data-ids="${[...ids].join(',')}">
+    <div class="k-who" style="gap:12px">${avatar(e)}<div><p class="eyebrow">${cap(dLong(parseD(k)))}</p><h2>Pointages de ${esc(e.first)}</h2></div></div>
+    <p class="muted" style="font-size:.85rem">Prévu : <span class="mono">${shs.length ? shs.map(s => s.start+'–'+s.end).join(' / ') : 'aucun shift'}</span></p>
+    ${probs.length ? `<div style="display:flex;flex-wrap:wrap;gap:6px">${probs.map(p => `<span class="chip ${p.lvl}">${esc(p.text)}</span>`).join('')}</div>` : ''}
+    <div id="prows" style="display:grid;gap:8px">${ps.map(p => punchRow(p.type, hm(p.ts))).join('')}</div>
+    <button class="btn" type="button" data-act="add-prow" style="justify-self:start">${ico('plus',2.2)} Ajouter un pointage</button>
+    <p class="hint">Saisissez les pointages dans l'ordre. Une heure plus tôt que la précédente passe au lendemain (fermeture après minuit). Chaque correction est tracée.</p>
+    <div class="modal-actions"><button class="btn" type="button" data-act="close-modal">Annuler</button><button class="btn primary" type="submit">Enregistrer</button></div>
+  </form>`);
+}
+function openEmpModal(id){
+  const e = id ? empById(id) : null;
+  const v = e || {first:'', last:'', role:'equipier', poste:'Caisse', contract:24, rate:12.20, pin:'', mpin:''};
+  openModal(`<form id="empForm" data-id="${e?e.id:''}">
+    <div><p class="eyebrow">Équipe & codes</p><h2>${e?'Modifier '+esc(e.first):'Nouvel employé'}</h2></div>
+    <div class="grid2"><label class="f">Prénom<input class="inp" id="ef-first" name="first" value="${esc(v.first)}" required></label><label class="f">Nom<input class="inp" id="ef-last" name="last" value="${esc(v.last)}" required></label></div>
+    <div class="grid2"><label class="f">Rôle<select class="inp" id="ef-role" name="role">${opt(Object.entries(ROLE_LABEL), v.role)}</select></label><label class="f">Poste<select class="inp" id="ef-poste" name="poste">${opt(POSTES.map(p => [p,p]), v.poste)}</select></label></div>
+    <div class="grid2"><label class="f">Contrat (h/sem)<input class="inp" id="ef-contract" name="contract" type="number" min="1" max="48" step="0.5" value="${v.contract}" required></label><label class="f">Taux horaire brut (€)<input class="inp" id="ef-rate" name="rate" type="number" min="0" step="0.01" value="${v.rate}" required></label></div>
+    <div class="grid2"><label class="f">Code de pointage (4 chiffres)<div style="display:flex;gap:6px"><input class="inp mono" id="ef-pin" name="pin" inputmode="numeric" maxlength="4" value="${esc(v.pin)}" placeholder="0000" required><button class="btn" type="button" data-act="gen-pin" data-len="4" data-target="ef-pin">Générer</button></div></label>
+      <label class="f">Code manager (6 chiffres)<div style="display:flex;gap:6px"><input class="inp mono" id="ef-mpin" name="mpin" inputmode="numeric" maxlength="6" value="${esc(v.mpin||'')}" placeholder="Managers seulement"><button class="btn" type="button" data-act="gen-pin" data-len="6" data-target="ef-mpin">Générer</button></div></label></div>
+    <p class="err" id="ef-err" hidden></p>
+    <div class="modal-actions">${e?`<button class="btn danger" type="button" data-act="del-emp" data-id="${e.id}">Supprimer</button><span class="spacer"></span>`:''}<button class="btn" type="button" data-act="close-modal">Annuler</button><button class="btn primary" type="submit">Enregistrer</button></div>
+  </form>`);
+}
+function openAbsModal(){
+  const t = todayKey();
+  openModal(`<form id="absForm">
+    <div><p class="eyebrow">Absences</p><h2>Déclarer une absence</h2></div>
+    <label class="f">Employé<select class="inp" id="af-emp" name="emp">${empOptions()}</select></label>
+    <label class="f">Type<select class="inp" id="af-type" name="type">${opt(Object.entries(ABS_LABEL),'conge')}</select></label>
+    <div class="grid2"><label class="f">Du<input class="inp" id="af-from" name="from" type="date" value="${t}" required></label><label class="f">Au<input class="inp" id="af-to" name="to" type="date" value="${t}" required></label></div>
+    <label class="f">Heures par jour<input class="inp" id="af-hpd" name="hpd" type="number" min="0.5" max="12" step="0.25" placeholder="Par défaut : contrat ÷ 5"></label>
+    <div class="modal-actions"><button class="btn" type="button" data-act="close-modal">Annuler</button><button class="btn primary" type="submit">Enregistrer</button></div>
+  </form>`);
+}
+function openPayDetail(id){
+  const e = empById(id), [y,m] = ui.month, weeks = monthWeeks(y,m);
+  const rows = weeks.map(w => { const s = weekStats(e, w), d = parseD(w); return {...s, head:`<td><b>S${isoWeek(d)}</b><br><span class="muted" style="font-size:.74rem">${dShort(d)} → ${dShort(addDays(d,6))}</span></td>`}; });
+  openModal(`<div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start"><div class="k-who" style="gap:12px">${avatar(e)}<div><p class="eyebrow">${monthName(y,m)} · par semaine</p><h2>${esc(fullName(e))}</h2></div></div><button class="btn ghost icon" data-act="close-modal" aria-label="Fermer">✕</button></div>
+    <p class="muted" style="font-size:.85rem">Contrat ${e.contract}h/sem · ${eur(e.rate)} brut/h · ${esc(e.poste)}</p>
+    <div class="tw">${payTable(rows, sumStats(rows), 'Semaine')}</div>`, true);
+}
+
+/* ================= misc ================= */
+let tT; function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(tT); tT = setTimeout(() => t.classList.remove('show'), 2800); }
+function arm(btn, label='Confirmer la suppression'){
+  if (btn.dataset.armed) return true;
+  const old = btn.textContent; btn.dataset.armed = '1'; btn.textContent = label; btn.classList.add('armed');
+  setTimeout(() => { if (btn.isConnected){ delete btn.dataset.armed; btn.textContent = old; btn.classList.remove('armed'); } }, 4000);
+  return false;
+}
+function lock(msg){ mgr = null; screen = 'home'; mpin = {pin:'', err:''}; closeModal(); render(); window.scrollTo(0,0); if (msg) toast(msg); }
+
+function render(){
+  const app = $('#app');
+  if (screen === 'kiosk') app.innerHTML = kioskHTML();
+  else if (screen === 'mgr-pin') app.innerHTML = mgrPinHTML();
+  else if (screen === 'planning') app.innerHTML = pubPlanningHTML();
+  else if (screen === 'manager' && mgr && empById(mgr)) app.innerHTML = shellHTML();
+  else { screen = 'home'; app.innerHTML = homeHTML(); }
+}
+
+/* ================= events ================= */
+document.addEventListener('pointerdown', () => { lastAct = Date.now(); }, true);
+document.addEventListener('click', ev => {
+  const t = ev.target.closest('[data-act]'); if (!t) return;
+  const a = t.dataset.act, d = t.dataset;
+  switch (a){
+    case 'go-home': screen = 'home'; resetKiosk(); render(); break;
+    case 'go-kiosk': screen = 'kiosk'; resetKiosk(); render(); break;
+    case 'go-planning': { const n = new Date(); ui.pubWeek = dkey(mondayOf(n)); ui.pubDay = todayKey(); ui.pubMode = window.innerWidth < 760 ? 'day' : 'week'; screen = 'planning'; render(); window.scrollTo(0,0); break; }
+    case 'pweek': ui.pubWeek = dkey(addDays(parseD(ui.pubWeek), +d.d)); ui.pubDay = dkey(addDays(parseD(ui.pubDay), +d.d)); render(); break;
+    case 'pweek-today': ui.pubWeek = dkey(mondayOf(new Date())); ui.pubDay = todayKey(); render(); break;
+    case 'pmode': ui.pubMode = d.m; render(); break;
+    case 'pday': ui.pubDay = d.k; render(); break;
+    case 'go-mgr': screen = 'mgr-pin'; mpin = {pin:'', err:''}; render(); break;
+    case 'lock': lock('Espace manager verrouillé'); break;
+    case 'nav': view = d.v; render(); window.scrollTo(0,0); break;
+    case 'go-ctrl': view = 'controle'; ui.day = d.date || todayKey(); ui.filter = 'all'; render(); window.scrollTo(0,0); break;
+    case 'week': ui.week = dkey(addDays(parseD(ui.week), +d.d)); render(); break;
+    case 'week-today': ui.week = dkey(mondayOf(new Date())); render(); break;
+    case 'day': ui.day = dkey(addDays(parseD(ui.day), +d.d)); render(); break;
+    case 'day-today': ui.day = todayKey(); render(); break;
+    case 'filter': ui.filter = d.f; render(); break;
+    case 'month': { let [y,m] = ui.month; m += +d.d; if (m < 0){ m = 11; y--; } if (m > 11){ m = 0; y++; } ui.month = [y,m]; render(); break; }
+    case 'validate': { const me = empById(mgr); if (dayBlockers(ui.day).length){ toast('Il reste des oublis à corriger'); return; } state.validated[ui.day] = {by:me ? me.first : 'Manager', ts:Date.now()}; mutate(); render(); toast('Journée validée'); break; }
+    case 'unvalidate': delete state.validated[ui.day]; mutate(); render(); toast('Journée rouverte'); break;
+    case 'new-shift': openShiftModal(null, d.emp, d.date); break;
+    case 'edit-shift': openShiftModal(d.id); break;
+    case 'del-shift': if (!arm(t)) return; state.shifts = state.shifts.filter(s => s.id !== d.id); mutate(); closeModal(); render(); toast('Shift supprimé'); break;
+    case 'copy-week': {
+      const mon = parseD(ui.week), prev = dkey(addDays(mon,-7)), prevEnd = dkey(addDays(mon,-1)); let n = 0;
+      for (const s of state.shifts.filter(s => s.date >= prev && s.date <= prevEnd)){ const nk = dkey(addDays(parseD(s.date), 7)); if (state.shifts.some(x => x.emp === s.emp && x.date === nk) || absenceOn(s.emp, nk)) continue; state.shifts.push({...s, id:uid(), date:nk}); n++; }
+      if (n){ mutate(); render(); } toast(n ? `${n} shifts copiés sur les jours encore libres` : 'Rien à copier : les jours sont déjà planifiés'); break; }
+    case 'edit-punches': openPunchEditor(d.emp, d.date); break;
+    case 'add-prow': { const rows = $('#prows'); const last = rows.querySelector('.prow:last-child select'); const next = {in:'break_start', break_start:'break_end', break_end:'out', out:'in'}[last ? last.value : 'out'] || 'in'; rows.insertAdjacentHTML('beforeend', punchRow(next, hm(Date.now()))); rows.querySelector('.prow:last-child input').focus(); break; }
+    case 'del-prow': t.closest('.prow').remove(); break;
+    case 'new-emp': openEmpModal(null); break;
+    case 'edit-emp': openEmpModal(d.id); break;
+    case 'gen-pin': { const len = +d.len, used = new Set(state.employees.map(e => len === 4 ? e.pin : e.mpin)); let c; do { c = String(Math.floor(Math.random()*10**len)).padStart(len,'0'); } while (used.has(c)); $('#'+d.target).value = c; break; }
+    case 'del-emp': { if (!arm(t)) return; const id = d.id; if (id === mgr){ toast('Vous ne pouvez pas supprimer votre propre fiche'); return; } state.employees = state.employees.filter(e => e.id !== id); state.shifts = state.shifts.filter(s => s.emp !== id); state.punches = state.punches.filter(p => p.emp !== id); state.absences = state.absences.filter(x => x.emp !== id); mutate(); closeModal(); render(); toast('Employé supprimé'); break; }
+    case 'toggle-codes': ui.hideCodes = !ui.hideCodes; render(); break;
+    case 'copy-codes': { const txt = ['Nom\tPoste\tCode de pointage', ...state.employees.map(e => `${fullName(e)}\t${e.poste}\t${e.pin}`)].join('\n');
+      try { navigator.clipboard.writeText(txt).then(() => toast('Liste copiée'), () => toast('Copie refusée par le navigateur')); } catch(e){ toast('Copie indisponible ici'); } break; }
+    case 'new-abs': openAbsModal(); break;
+    case 'del-abs': if (!arm(t, 'Confirmer ?')) return; state.absences = state.absences.filter(x => x.id !== d.id); mutate(); render(); toast('Absence supprimée'); break;
+    case 'pay-detail': openPayDetail(d.id); break;
+    case 'imp-parse': { const txt = $('#imp-text').value; imp = txt.trim() ? analyseImport(txt) : {err:'Déposez un fichier ou collez le contenu du planning.'}; paint('imp-preview', impPreview()); break; }
+    case 'imp-example': { const txt = exampleCSV(); $('#imp-text').value = txt; imp = analyseImport(txt); paint('imp-preview', impPreview()); break; }
+    case 'imp-run': runImport(); break;
+    case 'see-planning': if (imp && imp.first) ui.week = dkey(mondayOf(parseD(imp.first))); imp = null; view = 'planning'; render(); window.scrollTo(0,0); break;
+    case 'dl-template': saveFile('modele_planning_horodia.csv', toCSV([['Employé','Date','Début','Fin','Poste'],['Léa Dubois','03/11/2026','11:00','15:00','Caisse'],['Hugo Lefèvre','03/11/2026','18:30','23:00','Cuisine']])); break;
+    case 'export': doExport(); break;
+    case 'sel-csv': { const ta = $('#csv-out'); if (ta){ ta.focus(); ta.select(); } break; }
+    case 'close-modal': closeModal(); break;
+    case 'reset-demo': if (!arm(t, 'Confirmer la réinitialisation')) return; state = freshState(); genActivity(); mutate(); if (!empById(mgr)) mgr = state.employees[0].id; render(); toast('Démo réinitialisée'); break;
+    case 'k-key': kioskPress(d.k); break;
+    case 'm-key': mgrPress(d.k); break;
+    case 'k-act': kioskAction(d.type); break;
+    case 'k-cancel': resetKiosk(); paint('kPanel', kioskPanel()); break;
+  }
+});
+document.addEventListener('mousedown', ev => { if (ev.target.id === 'overlay') closeModal(); });
+document.addEventListener('keydown', ev => {
+  lastAct = Date.now();
+  if (ev.key === 'Escape' && modalOpen){ closeModal(); return; }
+  if (modalOpen || /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName||'')) return;
+  if (screen === 'kiosk' && !kiosk.emp && !kiosk.done){ if (/^[0-9]$/.test(ev.key)) kioskPress(ev.key); else if (ev.key === 'Backspace') kioskPress('del'); }
+  if (screen === 'mgr-pin'){ if (/^[0-9]$/.test(ev.key)) mgrPress(ev.key); else if (ev.key === 'Backspace') mgrPress('del'); }
+});
+document.addEventListener('input', ev => {
+  if (ev.target.id === 'team-q'){ const v = norm(ev.target.value); document.querySelectorAll('tr[data-q]').forEach(tr => { tr.hidden = v && !tr.dataset.q.includes(v); }); }
+});
+document.addEventListener('change', ev => {
+  const t = ev.target;
+  if (t.id === 'day-pick' && t.value){ ui.day = t.value; render(); }
+  if (t.id === 'sf-emp'){ const e = empById(t.value), p = $('#sf-poste'); if (e && p) p.value = e.poste; }
+  if (t.name === 'fmt'){ ui.fmt = t.value; }
+  if (t.id === 'imp-file' && t.files && t.files[0]){ const r = new FileReader(); r.onload = () => { const txt = String(r.result); $('#imp-text').value = txt; imp = analyseImport(txt); paint('imp-preview', impPreview()); }; r.readAsText(t.files[0]); }
+});
+document.addEventListener('dragover', ev => { const d = ev.target.closest && ev.target.closest('#drop'); if (d){ ev.preventDefault(); d.classList.add('over'); } });
+document.addEventListener('dragleave', ev => { const d = ev.target.closest && ev.target.closest('#drop'); if (d) d.classList.remove('over'); });
+document.addEventListener('drop', ev => { const d = ev.target.closest && ev.target.closest('#drop'); if (!d) return; ev.preventDefault(); d.classList.remove('over'); const f = ev.dataTransfer.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { const txt = String(r.result); $('#imp-text').value = txt; imp = analyseImport(txt); paint('imp-preview', impPreview()); }; r.readAsText(f); });
+document.addEventListener('submit', ev => {
+  ev.preventDefault();
+  const f = ev.target, fd = new FormData(f), g = k => String(fd.get(k) ?? '').trim();
+  switch (f.id){
+    case 'shiftForm': {
+      const id = f.dataset.id, v = {emp:g('emp'), date:g('date'), start:g('start'), end:g('end'), poste:g('poste')};
+      if (!v.date || !v.start || !v.end || v.start === v.end){ toast('Vérifiez la date et les horaires'); return; }
+      if (id) Object.assign(state.shifts.find(s => s.id === id), v); else state.shifts.push({id:uid(), ...v});
+      mutate(); closeModal(); render(); toast(id ? 'Shift modifié' : 'Shift ajouté'); break; }
+    case 'punchForm': {
+      const emp = f.dataset.emp, k = f.dataset.date, old = new Set(f.dataset.ids.split(',').filter(Boolean));
+      const oldMap = new Map(state.punches.filter(p => old.has(p.id)).map(p => [p.type+'@'+p.ts, p]));
+      const rows = [...f.querySelectorAll('.prow')].map(r => ({type:r.querySelector('select').value, time:r.querySelector('input').value})).filter(r => r.time);
+      let prev = -Infinity, offset = 0; const next = [];
+      for (const r of rows){ let ts = atTime(k, r.time) + offset; if (ts < prev){ offset += 86400000; ts += 86400000; } prev = ts; next.push(oldMap.get(r.type+'@'+ts) || {id:uid(), emp, ts, type:r.type, src:'manager'}); }
+      const changed = next.length !== old.size || next.some(p => !old.has(p.id));
+      state.punches = state.punches.filter(p => !old.has(p.id)).concat(next).sort((a,b) => a.ts - b.ts);
+      mutate(); closeModal(); render(); toast(changed ? 'Pointages corrigés' : 'Aucun changement'); break; }
+    case 'empForm': {
+      const id = f.dataset.id, err = $('#ef-err');
+      const v = {first:g('first'), last:g('last'), role:g('role'), poste:g('poste'), contract:+g('contract'), rate:+g('rate'), pin:g('pin'), mpin:g('mpin')};
+      if (!isMgrRole(v.role)) v.mpin = '';
+      const bad = !v.first || !v.last ? 'Le prénom et le nom sont obligatoires.'
+        : !/^\d{4}$/.test(v.pin) ? 'Le code de pointage doit faire 4 chiffres.'
+        : state.employees.some(e => e.pin === v.pin && e.id !== id) ? 'Ce code de pointage est déjà utilisé.'
+        : isMgrRole(v.role) && !/^\d{6}$/.test(v.mpin) ? 'Un gérant ou manager a besoin d\'un code manager à 6 chiffres.'
+        : v.mpin && state.employees.some(e => e.mpin === v.mpin && e.id !== id) ? 'Ce code manager est déjà utilisé.'
+        : id === mgr && !isMgrRole(v.role) ? 'Vous ne pouvez pas retirer votre propre accès manager.'
+        : !(v.contract > 0) || !(v.rate >= 0) ? 'Vérifiez le contrat et le taux horaire.' : '';
+      if (bad){ err.textContent = bad; err.hidden = false; return; }
+      if (id) Object.assign(empById(id), v); else state.employees.push({id:'e'+uid(), mat:Math.max(0, ...state.employees.map(e => e.mat||0))+1, ...v});
+      mutate(); closeModal(); render(); toast(id ? 'Fiche mise à jour' : `${v.first} a rejoint l'équipe`); break; }
+    case 'absForm': {
+      const e = empById(g('emp')); let from = g('from'), to = g('to'); if (!e || !from || !to) return; if (to < from) [from,to] = [to,from];
+      state.absences.push({id:uid(), emp:e.id, type:g('type'), from, to, hpd:+g('hpd') || Math.round(e.contract/5*100)/100}); mutate(); closeModal(); render(); toast('Absence enregistrée'); break; }
+    case 'codesForm': { for (const [k] of RUBRICS){ const v = g(k); if (v) state.company.codes[k] = v; } mutate(); toast('Codes enregistrés'); break; }
+    case 'settingsForm': {
+      const c = state.company, num = (k, min, max) => { const x = parseFloat(g(k)); return isFinite(x) ? Math.min(max, Math.max(min, x)) : c[k]; };
+      Object.assign(c, {name:g('name')||c.name, city:g('city'), sector:g('sector'), ccn:g('ccn'), legalWeek:num('legalWeek',1,48), lateTol:num('lateTol',0,60), missDelay:num('missDelay',5,240), compRate:num('compRate',0,100), sup1Rate:num('sup1Rate',0,200), sup1Cap:num('sup1Cap',0,20), sup2Rate:num('sup2Rate',0,200), sundayRate:num('sundayRate',0,200), nightRate:num('nightRate',0,200), nightStart:g('nightStart')||c.nightStart, nightEnd:g('nightEnd')||c.nightEnd});
+      mutate(); render(); toast('Réglages enregistrés'); break; }
+  }
+});
+
+/* ================= timers ================= */
+setInterval(() => { const t = $('#kTime'); if (t){ const n = new Date(); t.innerHTML = `${hm(n)}<span>${pad(n.getSeconds())}</span>`; } }, 1000);
+setInterval(() => {
+  if (screen === 'planning' && Date.now() - lastAct > 120000){ screen = 'home'; render(); return; }
+  if (screen === 'manager' && Date.now() - lastAct > 15*60000){ lock('Espace manager verrouillé après 15 min sans activité'); return; }
+  if (screen === 'manager' && !modalOpen && view === 'dashboard') render();
+}, 30000);
+
+/* ================= boot ================= */
+function boot(){
+  const s = load();
+  if (s && s.v === 2 && Array.isArray(s.employees)){ state = s; state.validated = state.validated || {}; state.syncLog = state.syncLog || []; state.company.codes = Object.assign(defaultCompany().codes, state.company.codes||{}); if (state.seedDate !== todayKey()) genActivity(); }
+  else { state = freshState(); genActivity(); }
+  save();
+  const now = new Date();
+  ui.week = dkey(mondayOf(now)); ui.day = todayKey(); ui.month = [now.getFullYear(), now.getMonth()];
+  resetKiosk(); render();
+}
+boot();
+})();
+</script>
+</body></html>

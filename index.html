@@ -1,0 +1,642 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" type="image/png" href="icon.png"><link rel="apple-touch-icon" href="icon.png">
+<meta property="og:title" content="Horodia · La badgeuse en ligne de votre entreprise">
+<meta property="og:description" content="Pointage sur tablette, correction des oublis en 2 minutes, planning et export paie. 1 mois gratuit puis 70 €/mois, sans engagement.">
+<meta property="og:image" content="icon.png"><meta property="og:type" content="website">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
+<title>Horodia</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Horodia, la badgeuse en ligne sur tablette : pointage par code, contrôle des oublis en 2 minutes, planning et export paie. 1 mois gratuit puis 70 €/mois, résiliable à tout moment.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: one centred column (max 1180px); light bands for explaining, deep-green bands for the demo and the offer; the time-clock motif (mono digits, punch chips) carries through. */
+:root{
+  --bg:#F4F7F5; --surface:#FFFFFF; --surface-2:#EBF0ED; --line:#DCE3DF; --line-2:#C5CFCA;
+  --ink:#0F1814; --ink-2:#43524B; --ink-3:#6E7D76;
+  --accent:#0A7A5C; --accent-strong:#07684E; --accent-ink:#FFFFFF; --accent-soft:#DAF0E7;
+  --mint:#38C496; --badge:#F4B42C; --badge-ink:#2B1F00;
+  --deep:#0B2A21; --deep-2:#103629; --deep-ink:#EAF5F0; --deep-mut:#9DBCB0; --deep-line:#1E4A3B;
+  --ok:#1C7C44; --ok-soft:#DCF1E3; --warn:#9A5800; --warn-soft:#FBEACB; --bad:#B9302A;
+  --shadow:0 1px 2px rgba(15,24,20,.05),0 12px 34px rgba(15,24,20,.08);
+  --f-display:"Familjen Grotesk","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --r:14px; --r-lg:22px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0C1210; --surface:#141C19; --surface-2:#1B2522; --line:#25312C; --line-2:#34433C;
+    --ink:#E6EEEA; --ink-2:#A8B6AF; --ink-3:#7B8A83;
+    --accent:#38C496; --accent-strong:#4FD3A6; --accent-ink:#04241A; --accent-soft:#12372B;
+    --mint:#38C496; --badge:#F4B42C; --badge-ink:#2B1F00;
+    --deep:#0F231C; --deep-2:#143026; --deep-ink:#E6F3EE; --deep-mut:#93B3A7; --deep-line:#21473A;
+    --ok:#5BCB85; --ok-soft:#163423; --warn:#F0B24A; --warn-soft:#3A2A0E; --bad:#F2786F;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 14px 36px rgba(0,0,0,.35);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C1210; --surface:#141C19; --surface-2:#1B2522; --line:#25312C; --line-2:#34433C;
+  --ink:#E6EEEA; --ink-2:#A8B6AF; --ink-3:#7B8A83;
+  --accent:#38C496; --accent-strong:#4FD3A6; --accent-ink:#04241A; --accent-soft:#12372B;
+  --mint:#38C496; --badge:#F4B42C; --badge-ink:#2B1F00;
+  --deep:#0F231C; --deep-2:#143026; --deep-ink:#E6F3EE; --deep-mut:#93B3A7; --deep-line:#21473A;
+  --ok:#5BCB85; --ok-soft:#163423; --warn:#F0B24A; --warn-soft:#3A2A0E; --bad:#F2786F;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 14px 36px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--surface)}
+h1,h2,h3{font-family:var(--f-display);margin:0;line-height:1.08;letter-spacing:-.02em;text-wrap:balance}
+h1{font-size:clamp(2.4rem,5.2vw,4.1rem);font-weight:700}
+h2{font-size:clamp(1.9rem,3.6vw,2.9rem);font-weight:700}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.band{padding-block:clamp(64px,9vw,112px)}
+.band.tight{padding-block:clamp(40px,6vw,64px)}
+.deep{background:var(--deep);color:var(--deep-ink)}
+.alt{background:var(--surface)}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.78rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+.eyebrow::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--badge)}
+.deep .eyebrow{color:var(--mint)}
+.lead{font-size:1.15rem;color:var(--ink-2);max-width:60ch}
+.deep .lead{color:var(--deep-mut)}
+.sec-head{display:grid;gap:14px;max-width:760px;margin-bottom:44px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:52px;padding:0 24px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font-family:var(--f-body);font-weight:700;font-size:1rem;text-decoration:none;cursor:pointer;transition:background .15s,transform .15s,border-color .15s;white-space:nowrap}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{background:var(--accent-strong);border-color:var(--accent-strong)}
+.btn.sm{height:42px;padding:0 16px;font-size:.92rem}
+.btn svg{width:18px;height:18px;flex:none}
+.deep .btn:not(.primary){background:transparent;border-color:var(--deep-line);color:var(--deep-ink)}
+.deep .btn:not(.primary):hover{background:var(--deep-2)}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:24px;height:70px}
+.logo{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:700;font-size:1.45rem;letter-spacing:-.02em;text-decoration:none;color:var(--ink)}
+.logo svg{width:30px;height:34px}
+.logo i{display:inline-block;width:7px;height:7px;border-radius:2px;background:var(--badge);margin-left:2px}
+nav.links{display:flex;gap:6px;margin-left:auto}
+nav.links a{padding:8px 12px;border-radius:9px;text-decoration:none;font-weight:600;font-size:.95rem;color:var(--ink-2)}
+nav.links a:hover{background:var(--surface-2);color:var(--ink)}
+
+/* hero */
+.hero{padding-block:clamp(40px,6vw,72px) clamp(56px,8vw,96px)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:56px;align-items:center}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero .lead{margin-top:22px}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.assure{display:flex;flex-wrap:wrap;gap:10px 20px;margin-top:26px;font-size:.92rem;font-weight:600;color:var(--ink-2)}
+.assure span{display:inline-flex;align-items:center;gap:8px}
+.assure svg{width:18px;height:18px;color:var(--ok);flex:none}
+.phone{position:relative;justify-self:center;width:min(330px,100%);max-width:100%;border-radius:46px;padding:12px;background:#0E1412;box-shadow:0 40px 90px rgba(15,24,20,.28),0 0 0 1px rgba(255,255,255,.06) inset}
+.phone video{width:100%;height:auto;aspect-ratio:9/16;object-fit:cover;border-radius:36px;display:block;background:#F2F5F3}
+.phone .notch{position:absolute;top:22px;left:50%;width:84px;height:22px;margin-left:-42px;border-radius:12px;background:#0E1412;z-index:2}
+.float{position:absolute;display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;background:var(--surface);box-shadow:var(--shadow);font-size:.88rem;font-weight:700;white-space:nowrap;color:var(--ink)}
+.float b{font-family:var(--f-mono);font-weight:600}
+.float .dot{width:10px;height:10px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px var(--ok-soft)}
+.f1{left:-60px;top:18%} .f2{right:-50px;top:56%}
+.f2 svg{width:22px;height:22px}
+
+/* proof strip */
+.strip{border-block:1px solid var(--line);background:var(--surface)}
+.strip .wrap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0}
+.strip .it{padding:26px 22px;display:grid;gap:4px;border-left:1px solid var(--line)}
+.strip .it:first-child{border-left:0}
+.strip b{font-family:var(--f-display);font-size:1.5rem;letter-spacing:-.02em}
+.strip span{font-size:.9rem;color:var(--ink-2)}
+
+/* pains */
+.pains{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.pain{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:28px;display:grid;gap:12px;align-content:start}
+.pain .ic{width:48px;height:48px;border-radius:13px;background:var(--warn-soft);color:var(--warn);display:grid;place-items:center}
+.pain .ic svg{width:24px;height:24px}
+.pain p{color:var(--ink-2);font-size:.98rem}
+.pain .fix{margin-top:6px;padding-top:14px;border-top:1px dashed var(--line-2);font-weight:700;color:var(--ok);font-size:.95rem;display:flex;gap:8px;align-items:flex-start}
+.pain .fix svg{width:18px;height:18px;flex:none;margin-top:4px}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;counter-reset:s}
+.step{position:relative;padding:28px;border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--line);display:grid;gap:10px;align-content:start}
+.step .n{font-family:var(--f-mono);font-weight:600;font-size:.85rem;color:var(--accent);background:var(--accent-soft);border-radius:8px;padding:4px 10px;justify-self:start}
+.step p{color:var(--ink-2);font-size:.98rem}
+.step .time{font-family:var(--f-mono);font-size:.85rem;color:var(--ink-3)}
+
+/* video band */
+.vid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:48px;align-items:center}
+.screen{border-radius:20px;overflow:hidden;background:#F2F5F3;box-shadow:0 30px 80px rgba(0,0,0,.35);border:1px solid var(--deep-line);aspect-ratio:16/9;max-width:100%}
+.screen video{width:100%;height:100%;display:block;object-fit:cover}
+.vid ul{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:14px}
+.vid li{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
+.vid li .t{font-family:var(--f-mono);font-size:.85rem;font-weight:600;color:var(--badge);padding-top:2px;min-width:52px}
+.vid li span:last-child{color:var(--deep-ink)}
+.vid .btn{margin-top:28px}
+
+/* features */
+.feat-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:48px;align-items:center;margin-bottom:56px}
+.mock{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);overflow:hidden}
+.mock-h{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--warn-soft);color:var(--warn);font-weight:800;font-size:.95rem}
+.mock-h svg{width:24px;height:24px;flex:none}
+.mrow{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(2,minmax(0,.7fr)) 44px;gap:8px;align-items:center;padding:13px 18px;border-top:1px solid var(--line);font-size:.95rem}
+.mrow.head{font-size:.7rem;font-weight:700;letter-spacing:.1em;color:var(--ink-3);text-transform:uppercase;border-top:0;padding-block:10px}
+.mrow b{font-weight:700}
+.mrow .tm{font-family:var(--f-mono);font-weight:600;font-variant-numeric:tabular-nums}
+.mrow.err{background:color-mix(in srgb,var(--warn-soft) 60%,transparent)}
+.mrow .q{display:inline-grid;place-items:center;width:30px;height:24px;border-radius:6px;background:#F6C02E;color:#2A1E00;font-weight:800}
+.mrow small{display:block;color:var(--warn);font-weight:700;font-size:.75rem}
+.okc{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--ok);color:var(--surface)}
+.okc svg{width:16px;height:16px}
+.sign{width:28px;height:28px}
+.feats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.feat{padding:24px;border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--line);display:grid;gap:10px;align-content:start}
+.feat .ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center}
+.feat .ic svg{width:23px;height:23px}
+.feat p{color:var(--ink-2);font-size:.93rem;line-height:1.5}
+.c1{background:#DDF2E6;color:#1D6A40} .c2{background:#DCEBFA;color:#1F4F86} .c3{background:#E6E1F7;color:#4B3A94} .c4{background:#FBE3D3;color:#8A3F10} .c5{background:#F6E7F0;color:#86305E}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .c1{background:#16362A;color:#8FDDB2} :root:not([data-theme="light"]) .c2{background:#182E47;color:#9CC6F2} :root:not([data-theme="light"]) .c3{background:#2A2445;color:#C4B6F7} :root:not([data-theme="light"]) .c4{background:#3D271A;color:#F5B98F} :root:not([data-theme="light"]) .c5{background:#3A1F30;color:#F0A9CF} }
+:root[data-theme="dark"] .c1{background:#16362A;color:#8FDDB2} :root[data-theme="dark"] .c2{background:#182E47;color:#9CC6F2} :root[data-theme="dark"] .c3{background:#2A2445;color:#C4B6F7} :root[data-theme="dark"] .c4{background:#3D271A;color:#F5B98F} :root[data-theme="dark"] .c5{background:#3A1F30;color:#F0A9CF}
+.checks{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:12px}
+.checks li{display:flex;gap:12px;align-items:flex-start;color:var(--ink-2)}
+.checks li svg{width:20px;height:20px;color:var(--ok);flex:none;margin-top:4px}
+.checks li b{color:var(--ink)}
+
+/* calculator */
+.calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow)}
+.calc .in{padding:32px;display:grid;gap:24px;align-content:start}
+.fld{display:grid;gap:8px}
+.fld label{display:flex;justify-content:space-between;gap:12px;font-weight:700;font-size:.95rem}
+.fld label output{font-family:var(--f-mono);font-weight:600;color:var(--accent);white-space:nowrap}
+.fld small{color:var(--ink-3);font-size:.82rem}
+input[type=range]{width:100%;accent-color:var(--accent);height:28px}
+.calc .out{padding:32px;background:var(--deep);color:var(--deep-ink);display:grid;gap:22px;align-content:start}
+.big{font-family:var(--f-display);font-size:clamp(2.6rem,5vw,3.6rem);font-weight:700;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.big small{font-size:.38em;font-family:var(--f-body);font-weight:600;color:var(--deep-mut);letter-spacing:0;margin-left:6px}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.kv div{display:grid;gap:2px;padding-top:14px;border-top:1px solid var(--deep-line)}
+.kv b{font-family:var(--f-mono);font-size:1.25rem;font-weight:600}
+.kv span{font-size:.85rem;color:var(--deep-mut)}
+.calc .note{font-size:.8rem;color:var(--deep-mut);line-height:1.5}
+.net{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;background:var(--deep-2);font-weight:700;justify-self:start}
+.net b{color:var(--mint);font-family:var(--f-mono)}
+
+/* compare */
+.cmp{display:grid;gap:16px;margin-top:8px}
+.bar-row{display:grid;grid-template-columns:240px minmax(0,1fr) 150px;gap:18px;align-items:center}
+.bar-row .lbl b{display:block;font-size:.98rem}
+.bar-row .lbl span{font-size:.82rem;color:var(--ink-3)}
+.track{position:relative;height:38px;border-radius:10px;background:var(--surface-2);overflow:hidden}
+.fill{position:absolute;left:0;top:0;bottom:0;border-radius:10px;transition:width .35s ease}
+.fill.range{background:repeating-linear-gradient(45deg,var(--line-2) 0 8px,transparent 8px 16px)}
+.fill.low{background:var(--ink-3);opacity:.45}
+.fill.us{background:var(--accent)}
+.bar-row .val{font-family:var(--f-mono);font-weight:600;text-align:right;white-space:nowrap}
+.bar-row.us .val{color:var(--accent)}
+.cmp-ctrl{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-bottom:22px;padding:18px 22px;border-radius:var(--r);background:var(--surface);border:1px solid var(--line)}
+.cmp-ctrl label{font-weight:700}
+.cmp-ctrl input{flex:1;min-width:180px}
+.cmp-ctrl output{font-family:var(--f-mono);font-weight:600;color:var(--accent);min-width:110px}
+.src{font-size:.8rem;color:var(--ink-3);margin-top:18px;max-width:80ch}
+
+/* pilot + founder */
+.duo{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:24px}
+.panel{border-radius:var(--r-lg);padding:34px;display:grid;gap:16px;align-content:start}
+.panel.pilot{background:var(--accent);color:var(--accent-ink)}
+.panel.pilot .eyebrow{color:var(--accent-ink)}
+.panel.pilot .eyebrow::before{background:var(--badge)}
+.panel.pilot p{opacity:.92}
+.panel.pilot ul{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:10px}
+.panel.pilot li{display:flex;gap:10px;align-items:flex-start;font-weight:600}
+.panel.pilot li svg{width:20px;height:20px;flex:none;margin-top:3px}
+.panel.pilot .btn{background:var(--surface);color:var(--ink);border-color:transparent;justify-self:start;margin-top:8px}
+.seats{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.seats i{width:28px;height:28px;border-radius:8px;border:2px solid rgba(255,255,255,.55)}
+.panel.founder{background:var(--surface);border:1px solid var(--line)}
+.quote{font-family:var(--f-display);font-size:1.45rem;line-height:1.3;letter-spacing:-.01em;font-weight:600}
+.panel.founder .who{display:flex;align-items:center;gap:14px;color:var(--ink-2);font-size:.92rem}
+.panel.founder .who .av{width:48px;height:48px;border-radius:14px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
+.panel.founder .who .av svg{width:24px;height:24px}
+
+/* pricing */
+.price{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center}
+.plan{background:var(--surface);color:var(--ink);border-radius:26px;padding:36px;box-shadow:0 30px 80px rgba(0,0,0,.3);display:grid;gap:18px}
+.plan .tag{justify-self:start;background:var(--badge);color:var(--badge-ink);font-weight:800;font-size:.85rem;padding:6px 12px;border-radius:999px}
+.plan .amt{font-family:var(--f-display);font-weight:700;font-size:4.4rem;letter-spacing:-.04em;line-height:1}
+.plan .amt small{font-size:1.1rem;font-family:var(--f-body);font-weight:600;color:var(--ink-3);letter-spacing:0}
+.plan .then{color:var(--ink-2);font-weight:600}
+.plan ul{list-style:none;margin:0;padding:18px 0 0;border-top:1px solid var(--line);display:grid;gap:10px}
+.plan li{display:flex;gap:10px;align-items:flex-start;font-size:.96rem}
+.plan li svg{width:19px;height:19px;color:var(--ok);flex:none;margin-top:4px}
+.plan .btn{width:100%}
+.timeline{display:grid;gap:0;margin-top:30px}
+.tl{display:grid;grid-template-columns:110px 1fr;gap:18px;padding:16px 0;border-top:1px solid var(--deep-line)}
+.tl b{font-family:var(--f-mono);color:var(--mint);font-weight:600}
+.tl span{color:var(--deep-ink)}
+
+/* faq */
+.faq{display:grid;gap:12px;max-width:860px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:0 22px}
+summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 0;font-weight:700;font-size:1.03rem}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:var(--f-mono);font-size:1.3rem;color:var(--accent);flex:none}
+details[open] summary::after{content:"–"}
+details p{padding:0 0 20px;color:var(--ink-2)}
+
+/* quote form */
+.devis{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:24px;align-items:start}
+form.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:32px;display:grid;gap:18px;box-shadow:var(--shadow)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.f{display:grid;gap:6px;font-weight:700;font-size:.9rem}
+.f input,.f select,.f textarea{font:inherit;font-weight:500;font-size:1rem;color:var(--ink);background:var(--surface);border:1px solid var(--line-2);border-radius:10px;padding:12px 14px;width:100%;min-width:0}
+.f textarea{min-height:110px;resize:vertical}
+.f input:focus,.f select:focus,.f textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:.86rem;color:var(--ink-2);font-weight:500}
+.consent input{margin-top:5px;accent-color:var(--accent);width:16px;height:16px;flex:none}
+.form-msg{padding:14px 16px;border-radius:12px;font-weight:600;font-size:.94rem}
+.form-msg.ok{background:var(--ok-soft);color:var(--ok)}
+.form-msg.err{background:var(--warn-soft);color:var(--warn)}
+.fb-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.fb-row .btn{white-space:nowrap}
+.fb-addr{margin:10px 0 0;font-weight:500;color:var(--ink-2);font-size:.88rem}
+.estim{position:sticky;top:calc(env(safe-area-inset-top,0px) + 90px);background:var(--deep);color:var(--deep-ink);border-radius:var(--r-lg);padding:28px;display:grid;gap:14px}
+.estim .row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--deep-line);font-size:.95rem}
+.estim .row b{font-family:var(--f-mono);font-weight:600}
+.estim .row.free b{color:var(--mint)}
+.estim .tot{font-family:var(--f-display);font-size:2.6rem;font-weight:700;letter-spacing:-.03em;line-height:1}
+.estim .tot small{font-size:.4em;color:var(--deep-mut);font-family:var(--f-body);letter-spacing:0;font-weight:600}
+.estim p{font-size:.82rem;color:var(--deep-mut)}
+
+footer{border-top:1px solid var(--line);background:var(--surface);padding-block:40px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:20px 40px;align-items:center;justify-content:space-between}
+footer p{color:var(--ink-3);font-size:.88rem}
+footer nav{display:flex;flex-wrap:wrap;gap:18px}
+footer nav a{color:var(--ink-2);text-decoration:none;font-weight:600;font-size:.92rem}
+
+/* responsive */
+@media (max-width:1020px){
+  .hero .wrap,.vid,.feat-main,.price,.duo,.devis,.calc{grid-template-columns:minmax(0,1fr)}
+  .feats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .f1{left:-10px} .f2{right:-10px}
+  .estim{position:static}
+}
+@media (max-width:760px){
+  nav.links{display:none}
+  header.top .btn{margin-left:auto}
+  .strip .wrap{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .strip .it:nth-child(3){border-left:0}
+  .strip .it:nth-child(n+3){border-top:1px solid var(--line)}
+  .pains,.steps{grid-template-columns:minmax(0,1fr)}
+  .bar-row{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px}
+  .bar-row .track{grid-column:1/-1;grid-row:2}
+  .g2{grid-template-columns:minmax(0,1fr)}
+  .kv{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:520px){
+  body{font-size:16px}
+  .feats{grid-template-columns:minmax(0,1fr)}
+  .float{display:none}
+  .calc .in,.calc .out,form.card,.panel,.plan{padding:24px}
+  .mrow{grid-template-columns:minmax(0,1.3fr) repeat(2,minmax(0,.8fr)) 34px;padding:12px 14px;font-size:.88rem}
+  .tl{grid-template-columns:84px 1fr}
+  .btn{white-space:normal;text-align:center;height:auto;min-height:52px;padding-block:10px}
+}
+</style>
+
+<header class="top"><div class="wrap">
+  <a class="logo" href="#top" aria-label="Horodia, accueil"><svg viewBox="0 0 22 25" aria-hidden="true"><rect width="22" height="25" rx="5.5" fill="var(--accent)"/><rect x="7" y="3.4" width="8" height="2.4" rx="1.2" fill="var(--surface)"/><circle cx="11" cy="15" r="5" fill="none" stroke="var(--accent-ink)" stroke-width="2"/><path d="M11 12.6v2.6l1.7 1.1" fill="none" stroke="var(--accent-ink)" stroke-width="1.7" stroke-linecap="round"/></svg><span>horodia<i></i></span></a>
+  <nav class="links" aria-label="Sections"><a href="#fonctionnement">Fonctionnement</a><a href="#demo">Démo</a><a href="#gain">Gain de temps</a><a href="#tarif">Tarif</a><a href="#faq">FAQ</a></nav>
+  <a class="btn primary sm" href="#devis">Demander un devis</a>
+</div></header>
+
+<main id="top">
+<!-- HERO -->
+<section class="hero"><div class="wrap">
+  <div>
+    <p class="eyebrow">Badgeuse en ligne · de 2 à 200 employés</p>
+    <h1>Vos pointages se font tout seuls. <em>Vos fins de journée prennent 2 minutes.</em></h1>
+    <p class="lead">Horodia remplace les feuilles d'heures et la pointeuse. Vos équipes pointent avec un code sur une tablette, vous repérez les oublis en un coup d'œil, et les heures sup partent prêtes pour la paie.</p>
+    <div class="cta-row"><a class="btn primary" href="#devis">Essayer 1 mois gratuit <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="btn" href="#demo"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>Voir la démo (30 s)</a></div>
+    <div class="assure"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>1 mois gratuit</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Résiliable à tout moment</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Aucune pointeuse à acheter</span></div>
+  </div>
+  <div style="position:relative;justify-self:center;width:min(330px,100%)">
+    <div class="phone"><span class="notch"></span><video src="videos/vente-9x16.mp4" poster="videos/vente-9x16.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Vidéo de présentation de Horodia"></video></div>
+    <div class="float f1"><span class="dot"></span>Léa · Arrivée <b>10:58</b></div>
+    <div class="float f2"><svg viewBox="0 0 24 24"><path d="M12 2.6 22.6 21.2H1.4z" fill="#F6C02E" stroke="#D29A00" stroke-width=".8"/><path d="M12 9.2v5.4" stroke="#2A1E00" stroke-width="2.3" stroke-linecap="round"/><circle cx="12" cy="17.9" r="1.35" fill="#2A1E00"/></svg>1 oubli repéré</div>
+  </div>
+</div></section>
+
+<!-- PROOF STRIP -->
+<section class="strip" aria-label="En bref"><div class="wrap">
+  <div class="it"><b class="mono">4 chiffres</b><span>pour pointer arrivée, pause et départ</span></div>
+  <div class="it"><b class="mono">2 min</b><span>pour vérifier toute la journée de l'équipe</span></div>
+  <div class="it"><b class="mono">1 clic</b><span>pour envoyer les heures à la paie</span></div>
+  <div class="it"><b class="mono">70 €</b><span>par mois, de 2 à 200 employés</span></div>
+</div></section>
+
+<!-- PAINS -->
+<section class="band" id="probleme"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Le problème</p><h2>La gestion des horaires vous coûte plus que vous ne le pensez</h2><p class="lead">Chaque oubli, chaque ligne recopiée et chaque heure sup recalculée à la main, c'est du temps de manager perdu et des erreurs sur la paie.</p></div>
+  <div class="pains">
+    <article class="pain"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h4"/></svg></span><h3>Les feuilles d'heures illisibles</h3><p>Ratures, oublis, heures arrondies. Il faut tout vérifier et recopier en fin de mois.</p><p class="fix"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Avec Horodia : chaque pointage est horodaté à la minute.</p></article>
+    <article class="pain"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><h3>Les oublis découverts trop tard</h3><p>Un départ non pointé se voit des semaines après, quand plus personne ne se souvient de l'heure.</p><p class="fix"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Avec Horodia : l'oubli s'affiche en jaune le soir même.</p></article>
+    <article class="pain"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h0M8 15h2M12 15h2M8 18h8"/></svg></span><h3>Les heures sup à la calculette</h3><p>Paliers à 25 % et 50 %, heures de nuit, dimanches : chaque mois, le même casse-tête avant d'envoyer au comptable.</p><p class="fix"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Avec Horodia : tout est calculé selon vos majorations.</p></article>
+  </div>
+</div></section>
+
+<!-- STEPS -->
+<section class="band alt" id="fonctionnement"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Comment ça marche</p><h2>Opérationnel en une journée, sans formation</h2></div>
+  <div class="steps">
+    <article class="step"><span class="n">Étape 1</span><h3>On installe Horodia avec vous</h3><p>Vos employés, leurs codes à 4 chiffres et vos règles (heures sup, nuit, dimanche). Une tablette au mur ou au comptoir suffit.</p><span class="time">Le premier jour</span></article>
+    <article class="step"><span class="n">Étape 2</span><h3>Votre équipe pointe en 2 secondes</h3><p>Le code, puis un bouton : Arrivée, Pause, Retour ou Départ. Pas de badge à perdre, pas de papier.</p><span class="time">Chaque jour</span></article>
+    <article class="step"><span class="n">Étape 3</span><h3>Vous validez, la paie est prête</h3><p>Le soir, la page Correction montre les oublis en jaune. En fin de mois, vous exportez les heures vers votre logiciel de paie.</p><span class="time">2 min par jour · 1 clic par mois</span></article>
+  </div>
+</div></section>
+
+<!-- DEMO VIDEO -->
+<section class="band deep" id="demo"><div class="wrap vid">
+  <div class="screen"><video src="videos/demo-16x9.mp4" poster="videos/demo-16x9.jpg" controls muted playsinline preload="metadata" aria-label="Démo : une journée de pointage sur la tablette Horodia"></video></div>
+  <div>
+    <p class="eyebrow">La démo en 30 secondes</p>
+    <h2>Une journée de pointage, du matin au soir</h2>
+    <ul>
+      <li><span class="t">10:58</span><span>Léa tape son code et pointe son arrivée.</span></li>
+      <li><span class="t">14:02</span><span>Elle part en pause d'une seule touche.</span></li>
+      <li><span class="t">14:31</span><span>Elle revient : les 29 minutes sont déduites toutes seules.</span></li>
+      <li><span class="t">18:04</span><span>Départ : 6h37 travaillées, calculées sans rien faire.</span></li>
+    </ul>
+    <a class="btn primary" href="demo.html">Essayer la démo interactive <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+</div></section>
+
+<!-- FEATURES -->
+<section class="band" id="fonctionnalites"><div class="wrap">
+  <div class="feat-main">
+    <div>
+      <p class="eyebrow">La fonction qui change tout</p>
+      <h2>La Correction : tous les oublis sur une seule page</h2>
+      <p class="lead" style="margin-top:16px">Chaque soir, une ligne par personne avec ses heures de pointage. Une coche verte si tout est bon, un panneau jaune et l'explication s'il manque quelque chose.</p>
+      <ul class="checks">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Départ ou retour de pause oublié</b> : repéré automatiquement</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Retards et départs anticipés</b> : comparés au planning, avec la tolérance que vous choisissez</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Corrigé en un clic</b>, et chaque correction reste tracée</span></li>
+      </ul>
+    </div>
+    <div class="mock" role="img" aria-label="Exemple de la page Correction avec un oubli de pointage">
+      <div class="mock-h"><svg viewBox="0 0 24 24"><path d="M12 2.6 22.6 21.2H1.4z" fill="#F6C02E" stroke="#D29A00" stroke-width=".8"/><path d="M12 9.2v5.4" stroke="#2A1E00" stroke-width="2.3" stroke-linecap="round"/><circle cx="12" cy="17.9" r="1.35" fill="#2A1E00"/></svg>1 pointage à corriger · vendredi 23 octobre</div>
+      <div class="mrow head"><span>Employé</span><span>Arrivée</span><span>Départ</span><span></span></div>
+      <div class="mrow"><b>Sophie Martin</b><span class="tm">08:58</span><span class="tm">17:18</span><span class="okc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></div>
+      <div class="mrow"><b>Karim Benali</b><span class="tm">10:28</span><span class="tm">18:29</span><span class="okc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></div>
+      <div class="mrow err"><span><b>Hugo Lefèvre</b><small>Départ non pointé</small></span><span class="tm">18:24</span><span class="tm"><span class="q">?</span></span><svg class="sign" viewBox="0 0 24 24"><path d="M12 2.6 22.6 21.2H1.4z" fill="#F6C02E" stroke="#D29A00" stroke-width=".8"/><path d="M12 9.2v5.4" stroke="#2A1E00" stroke-width="2.3" stroke-linecap="round"/><circle cx="12" cy="17.9" r="1.35" fill="#2A1E00"/></svg></div>
+      <div class="mrow"><b>Léa Dubois</b><span class="tm">10:58</span><span class="tm">18:04</span><span class="okc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></div>
+      <div class="mrow"><b>Inès Moreau</b><span class="tm">15:01</span><span class="tm">22:01</span><span class="okc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></div>
+    </div>
+  </div>
+  <div class="sec-head" style="margin-bottom:28px"><h2>Et tout le reste, au même endroit</h2></div>
+  <div class="feats">
+    <article class="feat"><span class="ic c1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><h3>Pointage par code</h3><p>Sur tablette, au mur ou au comptoir. Arrivée, pause, retour, départ. Pas de badge, pas d'empreinte digitale.</p></article>
+    <article class="feat"><span class="ic c2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><h3>Planning</h3><p>Créez les shifts, copiez la semaine précédente. L'équipe consulte le planning sur la tablette, sans code.</p></article>
+    <article class="feat"><span class="ic c3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.2"/><path d="M5.5 16c.6-1.6 2-2.4 3.5-2.4s2.9.8 3.5 2.4M15 10h3.5M15 13h2.5"/></svg></span><h3>Équipe & codes</h3><p>La liste de tout le monde avec son code de pointage, à portée de main. Les managers ont leur propre code.</p></article>
+    <article class="feat"><span class="ic c4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l6-6 4 4 6-8"/><path d="M15 8h5v5"/></svg></span><h3>Heures sup calculées</h3><p>Heures complémentaires, paliers sup, nuit et dimanche. Les majorations se règlent selon votre convention collective.</p></article>
+    <article class="feat"><span class="ic c5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M9.5 13.5l5 5M14.5 13.5l-5 5"/></svg></span><h3>Absences</h3><p>Congés payés, maladie, absences non rémunérées. Pris en compte dans les heures du mois.</p></article>
+    <article class="feat"><span class="ic c1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg></span><h3>Export paie</h3><p>Variables de paie avec vos codes de rubriques, récapitulatif mensuel ou pointages détaillés, en CSV.</p></article>
+    <article class="feat"><span class="ic c2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.5M20 4v4.5h-4.5M20 12a8 8 0 0 1-13.7 5.6L4 15.5M4 20v-4.5h4.5"/></svg></span><h3>Compatible avec vos logiciels</h3><p>Importez un planning fait ailleurs, envoyez les heures à votre logiciel de paie ou à votre comptable.</p></article>
+    <article class="feat"><span class="ic c3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><h3>Espace manager protégé</h3><p>Accès par code manager à 6 chiffres, verrouillage automatique. Les employés ne voient que la borne.</p></article>
+  </div>
+</div></section>
+
+<!-- CALCULATOR -->
+<section class="band alt" id="gain"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Calculez votre gain</p><h2>Combien de temps Horodia vous rend chaque mois ?</h2><p class="lead">Entrez vos chiffres. Le calcul se fait en direct, sans rien envoyer.</p></div>
+  <div class="calc">
+    <div class="in">
+      <div class="fld"><label for="c-emp">Nombre d'employés <output id="o-emp">25</output></label><input type="range" id="c-emp" min="2" max="200" step="1" value="25"></div>
+      <div class="fld"><label for="c-check">Temps passé à vérifier les heures <output id="o-check">2h / semaine</output></label><input type="range" id="c-check" min="15" max="600" step="15" value="120"><small>Feuilles d'heures, oublis à retrouver, ressaisie…</small></div>
+      <div class="fld"><label for="c-pay">Préparation des heures pour la paie <output id="o-pay">4h / mois</output></label><input type="range" id="c-pay" min="30" max="1200" step="30" value="240"><small>Calcul des heures sup, nuit, dimanches, envoi au comptable</small></div>
+      <div class="fld"><label for="c-rate">Coût horaire d'un manager <output id="o-rate">20 €</output></label><input type="range" id="c-rate" min="12" max="60" step="1" value="20"><small>Salaire chargé, environ</small></div>
+    </div>
+    <div class="out" aria-live="polite">
+      <div><p style="color:var(--deep-mut);font-weight:600">Temps gagné estimé</p><div class="big" id="r-hours">11h<small>par mois</small></div></div>
+      <div class="kv">
+        <div><b id="r-value">220 €</b><span>de temps manager récupéré</span></div>
+        <div><b id="r-peremp">2,80 €</b><span>par employé et par mois</span></div>
+      </div>
+      <p class="net">Gain net après abonnement : <b id="r-net">+150 €/mois</b></p>
+      <p class="note">Hypothèses : avec Horodia, la vérification prend environ 2 minutes par jour (26 jours par mois) et l'export paie environ 15 minutes par mois. Le résultat est une estimation à partir de vos chiffres.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- COMPARE -->
+<section class="band" id="prix"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Comparez</p><h2>Un prix fixe, quelle que soit la taille de l'équipe</h2><p class="lead">Beaucoup de logiciels facturent chaque employé en plus. Avec Horodia, 5 ou 150 personnes, c'est le même prix.</p></div>
+  <div class="cmp-ctrl"><label for="m-emp">Votre équipe</label><input type="range" id="m-emp" min="2" max="200" value="30"><output id="mo-emp">30 employés</output></div>
+  <div class="cmp" id="cmp">
+    <div class="bar-row"><div class="lbl"><b>Facturation par employé</b><span>3 à 7 € par employé et par mois</span></div><div class="track"><div class="fill range" id="b1r"></div><div class="fill low" id="b1l"></div></div><div class="val" id="v1">90 – 210 €</div></div>
+    <div class="bar-row"><div class="lbl"><b>Forfait par établissement</b><span>planning + pointage, selon options</span></div><div class="track"><div class="fill range" id="b2r"></div><div class="fill low" id="b2l"></div></div><div class="val" id="v2">60 – 130 €</div></div>
+    <div class="bar-row us"><div class="lbl"><b>Horodia</b><span>tout inclus, toute l'équipe</span></div><div class="track"><div class="fill us" id="b3"></div></div><div class="val" id="v3">70 €</div></div>
+  </div>
+  <p class="src">Fourchettes indicatives établies à partir des prix publics de logiciels de planning et de pointage pour la restauration et le commerce, relevés en octobre 2026, hors options et hors matériel. Une pointeuse physique coûte en plus 300 à 800 € à l'achat.</p>
+</div></section>
+
+<!-- PILOT + FOUNDER -->
+<section class="band tight"><div class="wrap duo">
+  <div class="panel pilot">
+    <p class="eyebrow">Programme pilote</p>
+    <h2>On cherche 10 entreprises pilotes</h2>
+    <p>Horodia se lance. Les 10 premières entreprises profitent d'un accompagnement direct pour démarrer, et leurs retours passent en priorité dans les prochaines versions.</p>
+    <ul>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Mise en place faite avec vous</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Un interlocuteur direct, le fondateur</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Vos demandes de fonctionnalités en priorité</li>
+    </ul>
+    <div class="seats" aria-label="10 places pilotes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <a class="btn" href="#devis">Devenir entreprise pilote</a>
+  </div>
+  <div class="panel founder">
+    <p class="eyebrow">Pourquoi Horodia</p>
+    <p class="quote">« Je gère des équipes, des plannings et des fins de mois. J'ai créé l'outil que j'aurais voulu avoir : simple pour les employés, rapide pour les managers. »</p>
+    <div class="who"><span class="av"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.2-6 8-6s7 2 8 6"/></svg></span><span>Le fondateur de Horodia,<br>manager en restauration</span></div>
+  </div>
+</div></section>
+
+<!-- PRICING -->
+<section class="band deep" id="tarif"><div class="wrap price">
+  <div>
+    <p class="eyebrow">Tarif</p>
+    <h2>Un seul prix. Tout est inclus.</h2>
+    <p class="lead" style="margin-top:16px">Pas d'options cachées, pas de supplément par employé, pas de pointeuse à acheter.</p>
+    <div class="timeline">
+      <div class="tl"><b>Mois 1</b><span>Gratuit. Vous testez avec toute votre équipe.</span></div>
+      <div class="tl"><b>Ensuite</b><span>70 € par mois et par établissement.</span></div>
+      <div class="tl"><b>À tout moment</b><span>Vous résiliez quand vous voulez et vous gardez l'export de vos données.</span></div>
+    </div>
+  </div>
+  <div class="plan">
+    <span class="tag">1 mois gratuit</span>
+    <div class="amt">70 €<small> / mois</small></div>
+    <p class="then">par établissement, de 2 à 200 employés · résiliable à tout moment</p>
+    <ul>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Pointage par code sur tablette</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Correction des oublis et validation des journées</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Planning, absences, équipe & codes</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Heures sup, nuit et dimanche calculées</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Export vers votre logiciel de paie ou votre comptable</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Mise en place accompagnée</li>
+    </ul>
+    <a class="btn primary" href="#devis">Commencer le mois gratuit</a>
+  </div>
+</div></section>
+
+<!-- FAQ -->
+<section class="band" id="faq"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Questions fréquentes</p><h2>Ce qu'on nous demande le plus</h2></div>
+  <div class="faq">
+    <details><summary>Faut-il acheter une pointeuse ?</summary><p>Non. Horodia fonctionne dans un navigateur : une tablette fixée au mur ou posée au comptoir suffit. Vous pouvez utiliser une tablette que vous avez déjà.</p></details>
+    <details><summary>Est-ce compliqué pour mes employés ?</summary><p>Ils tapent leur code à 4 chiffres et appuient sur un bouton : Arrivée, Pause, Retour ou Départ. La borne revient toute seule au clavier. Il n'y a rien à apprendre.</p></details>
+    <details><summary>Que se passe-t-il après le mois gratuit ?</summary><p>Si Horodia vous convient, l'abonnement passe à 70 € par mois et par établissement. Sinon, vous arrêtez, sans frais.</p></details>
+    <details><summary>Comment résilier ?</summary><p>À tout moment, sans engagement de durée. Vous pouvez exporter vos pointages et vos heures avant de partir.</p></details>
+    <details><summary>Est-ce compatible avec mon logiciel de paie ou mon comptable ?</summary><p>Horodia exporte les variables de paie (heures normales, heures sup par palier, nuit, dimanche, congés, absences) en CSV, avec les codes de rubriques de votre logiciel. Vous pouvez aussi importer un planning fait dans un autre logiciel.</p></details>
+    <details><summary>Horodia fait-il les fiches de paie ?</summary><p>Non. Horodia prépare les heures et les majorations ; les fiches de paie restent faites par votre logiciel de paie ou votre comptable. Vous lui envoyez des chiffres justes, sans ressaisie.</p></details>
+    <details><summary>Les majorations s'adaptent-elles à ma convention collective ?</summary><p>Oui. Durée hebdomadaire de référence, taux des heures complémentaires et supplémentaires, plages de nuit, dimanches et tolérance de retard se règlent dans l'espace manager.</p></details>
+    <details><summary>Et mes données, ainsi que celles de mes salariés ?</summary><p>Le pointage se fait par code personnel, sans biométrie. L'espace manager est protégé par un code et se verrouille tout seul. Vos données restent exportables à tout moment.</p></details>
+    <details><summary>Ça marche pour 200 employés ? Et plusieurs établissements ?</summary><p>Oui, de 2 à 200 employés au même prix. Pour plusieurs établissements, chaque site a son abonnement ; demandez un devis pour un tarif groupé.</p></details>
+  </div>
+</div></section>
+
+<!-- DEVIS -->
+<section class="band alt" id="devis"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Devis gratuit</p><h2>Votre devis en 1 minute</h2><p class="lead">Dites-nous qui vous êtes : vous voyez le prix tout de suite, et on vous recontacte pour démarrer votre mois gratuit.</p></div>
+  <div class="devis">
+    <form class="card" id="quote" novalidate>
+      <div class="g2"><label class="f">Nom et prénom<input id="q-name" name="nom" autocomplete="name" required></label><label class="f">Entreprise<input id="q-company" name="entreprise" autocomplete="organization" required></label></div>
+      <div class="g2"><label class="f">Secteur<select id="q-sector" name="secteur"><option>Restauration / fast-food</option><option>Bar / café</option><option>Boulangerie / commerce de bouche</option><option>Commerce / boutique</option><option>Artisan / BTP</option><option>Services / bureau</option><option>Autre</option></select></label><label class="f">Ville<input id="q-city" name="ville" autocomplete="address-level2"></label></div>
+      <div class="g2"><label class="f">Nombre d'employés<input id="q-emp" name="employes" type="number" min="2" max="200" value="15" inputmode="numeric"></label><label class="f">Nombre d'établissements<input id="q-sites" name="etablissements" type="number" min="1" max="50" value="1" inputmode="numeric"></label></div>
+      <div class="g2"><label class="f">E-mail<input id="q-email" name="email" type="email" autocomplete="email" required></label><label class="f">Téléphone<input id="q-phone" name="telephone" type="tel" autocomplete="tel"></label></div>
+      <label class="f">Votre besoin (facultatif)<textarea id="q-msg" name="message" placeholder="Ex. : on fait les plannings sur papier, on a souvent des oublis de pointage…"></textarea></label>
+      <label class="consent"><input type="checkbox" id="q-ok" name="consentement" required><span>J'accepte d'être recontacté au sujet de Horodia. Mes informations servent uniquement à répondre à ma demande.</span></label>
+      <div id="q-msgbox" hidden></div>
+      <button class="btn primary" type="submit" id="q-send">Recevoir mon devis</button>
+    </form>
+    <aside class="estim" aria-live="polite">
+      <p style="font-weight:700">Votre estimation</p>
+      <div class="tot" id="e-tot">70 €<small> / mois</small></div>
+      <div class="row free"><span>Mois 1</span><b>0 €</b></div>
+      <div class="row"><span id="e-sites-l">1 établissement × 70 €</span><b id="e-sum">70 €</b></div>
+      <div class="row"><span>Par employé</span><b id="e-per">4,67 €</b></div>
+      <div class="row"><span>Engagement</span><b>Aucun</b></div>
+      <p>Prix par établissement, de 2 à 200 employés. Résiliable à tout moment.</p>
+    </aside>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <a class="logo" href="#top"><svg viewBox="0 0 22 25" aria-hidden="true"><rect width="22" height="25" rx="5.5" fill="var(--accent)"/><rect x="7" y="3.4" width="8" height="2.4" rx="1.2" fill="var(--surface)"/><circle cx="11" cy="15" r="5" fill="none" stroke="var(--accent-ink)" stroke-width="2"/><path d="M11 12.6v2.6l1.7 1.1" fill="none" stroke="var(--accent-ink)" stroke-width="1.7" stroke-linecap="round"/></svg><span>horodia<i></i></span></a>
+  <nav aria-label="Pied de page"><a href="#fonctionnement">Fonctionnement</a><a href="#demo">Démo</a><a href="#tarif">Tarif</a><a href="#faq">FAQ</a><a href="#devis">Devis</a></nav>
+  <p id="f-contact">La badgeuse en ligne de votre entreprise</p>
+</div></footer>
+
+<script>
+(function(){
+  /* Configuration : à remplir au moment de la mise en ligne */
+  const FORM_ENDPOINT = 'https://formsubmit.co/ajax/contact.horodia@gmail.com';   // chaque devis est envoyé par e-mail à cette adresse
+  const CONTACT_EMAIL = 'contact.horodia@gmail.com';
+
+  const $ = id => document.getElementById(id);
+  const eur = (n, d=0) => new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:d,maximumFractionDigits:d}).format(n);
+  const hmin = m => { m = Math.max(0, Math.round(m)); const h = Math.floor(m/60), r = m % 60; return h ? h+'h'+(r ? String(r).padStart(2,'0') : '') : r+' min'; };
+  const PRICE = 70;
+
+  if (CONTACT_EMAIL) $('f-contact').textContent = 'Contact : ' + CONTACT_EMAIL;
+
+  /* calculator */
+  function calc(){
+    const emp = +$('c-emp').value, chk = +$('c-check').value, pay = +$('c-pay').value, rate = +$('c-rate').value;
+    $('o-emp').textContent = emp; $('o-check').textContent = hmin(chk) + ' / semaine'; $('o-pay').textContent = hmin(pay) + ' / mois'; $('o-rate').textContent = rate + ' €';
+    const now = chk * 52/12 + pay, withB = 2*26 + 15, saved = Math.max(0, now - withB);
+    const value = saved/60 * rate, net = value - PRICE;
+    $('r-hours').innerHTML = hmin(saved) + '<small>par mois</small>';
+    $('r-value').textContent = eur(value);
+    $('r-peremp').textContent = eur(PRICE/emp, 2);
+    $('r-net').textContent = (net >= 0 ? '+' : '') + eur(net) + '/mois';
+  }
+  ['c-emp','c-check','c-pay','c-rate'].forEach(id => $(id).addEventListener('input', calc)); calc();
+
+  /* comparison: drawn to one scale (the largest value shown) */
+  function cmp(){
+    const n = +$('m-emp').value; $('mo-emp').textContent = n + ' employé' + (n > 1 ? 's' : '');
+    const lo1 = 3*n, hi1 = 7*n, lo2 = 60, hi2 = 130, us = PRICE;
+    const max = Math.max(hi1, hi2, us) * 1.04;
+    $('b1r').style.width = (hi1/max*100)+'%'; $('b1l').style.width = (lo1/max*100)+'%';
+    $('b2r').style.width = (hi2/max*100)+'%'; $('b2l').style.width = (lo2/max*100)+'%';
+    $('b3').style.width = (us/max*100)+'%';
+    $('v1').textContent = eur(lo1) + ' – ' + eur(hi1); $('v2').textContent = eur(lo2) + ' – ' + eur(hi2); $('v3').textContent = eur(us);
+  }
+  $('m-emp').addEventListener('input', cmp); cmp();
+
+  /* live quote */
+  function quote(){
+    const emp = Math.min(200, Math.max(2, +$('q-emp').value || 2)), sites = Math.min(50, Math.max(1, Math.round(+$('q-sites').value || 1)));
+    const tot = sites * PRICE;
+    $('e-tot').innerHTML = eur(tot) + '<small> / mois</small>';
+    $('e-sites-l').textContent = sites + ' établissement' + (sites > 1 ? 's' : '') + ' × 70 €';
+    $('e-sum').textContent = eur(tot);
+    $('e-per').textContent = eur(tot/(emp*sites), 2);
+  }
+  ['q-emp','q-sites'].forEach(id => $(id).addEventListener('input', quote)); quote();
+
+  /* form */
+  const box = $('q-msgbox');
+  function msg(kind, text){ box.className = 'form-msg ' + kind; box.textContent = text; box.hidden = false; }
+  const LABELS = {nom:'Nom', entreprise:'Entreprise', secteur:'Secteur', ville:'Ville', employes:'Employés', etablissements:'Établissements', email:'E-mail', telephone:'Téléphone', message:'Message', estimation_mensuelle:'Estimation mensuelle'};
+  function fallback(data){
+    const body = Object.keys(LABELS).filter(k => data[k]).map(k => LABELS[k] + ' : ' + data[k]).join('\n');
+    const subj = data._subject;
+    msg('err', 'L\'envoi automatique n\'a pas abouti. Envoyez votre demande en un clic :');
+    const row = document.createElement('div'); row.className = 'fb-row';
+    const mk = (label, href, cls) => { const a = document.createElement('a'); a.className = 'btn sm ' + cls; a.textContent = label; a.href = href; a.target = '_blank'; a.rel = 'noopener'; return a; };
+    row.appendChild(mk('Envoyer avec Gmail', 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(CONTACT_EMAIL) + '&su=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(body), 'primary'));
+    row.appendChild(mk('Autre messagerie', 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(body), ''));
+    const c = document.createElement('button'); c.type = 'button'; c.className = 'btn sm'; c.textContent = 'Copier ma demande';
+    c.addEventListener('click', async () => { try { await navigator.clipboard.writeText('À : ' + CONTACT_EMAIL + '\nObjet : ' + subj + '\n\n' + body); c.textContent = 'Copié ✓'; } catch(_){ c.textContent = CONTACT_EMAIL; } });
+    row.appendChild(c);
+    const p = document.createElement('p'); p.className = 'fb-addr'; p.textContent = 'Ou écrivez directement à ' + CONTACT_EMAIL;
+    box.appendChild(row); box.appendChild(p);
+  }
+  $('quote').addEventListener('submit', async ev => {
+    ev.preventDefault();
+    const f = ev.target, data = Object.fromEntries(new FormData(f).entries());
+    if (!data.nom || !data.entreprise){ msg('err', 'Indiquez votre nom et le nom de votre entreprise.'); return; }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email || '')){ msg('err', 'Vérifiez votre adresse e-mail : elle sert à vous envoyer le devis.'); return; }
+    if (!$('q-ok').checked){ msg('err', 'Cochez la case pour accepter d\'être recontacté.'); return; }
+    data.estimation_mensuelle = $('e-sum').textContent;
+    data._subject = 'Demande de devis Horodia · ' + data.entreprise; data._template = 'table'; data._captcha = 'false';
+    if (!FORM_ENDPOINT){ msg('err', 'L\'envoi du formulaire n\'est pas encore activé sur cette page : votre demande n\'a pas été envoyée.' + (CONTACT_EMAIL ? ' Écrivez-nous à ' + CONTACT_EMAIL + '.' : '')); return; }
+    const btn = $('q-send'); btn.disabled = true; btn.textContent = 'Envoi…';
+    try {
+      const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 15000);
+      const r = await fetch(FORM_ENDPOINT, {method:'POST', headers:{'Content-Type':'application/json', 'Accept':'application/json'}, body:JSON.stringify(data), signal:ctl.signal});
+      clearTimeout(to);
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !(j.success === true || j.success === 'true')) throw new Error(j.message || 'http');
+      f.reset(); quote();
+      msg('ok', 'Merci ! Votre demande est bien partie. On vous recontacte rapidement avec votre devis.');
+    } catch(e){
+      fallback(data);
+    } finally { btn.disabled = false; btn.textContent = 'Recevoir mon devis'; }
+  });
+})();
+</script>
+
+</body></html>
